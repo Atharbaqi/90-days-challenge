@@ -40,6 +40,9 @@
     </script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #F8FAFC; scroll-behavior: smooth; }
+        .day-card.active { border-color: #10B981; background: rgba(16, 185, 129, 0.1); }
+        .day-card.completed { background: #1E293B; opacity: 0.7; }
+        .day-card.locked { background: #0F172A; border-style: dashed; opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -48,31 +51,45 @@
     <header class="bg-[#0F172A] border-b border-slate-800 py-4 px-6 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center space-x-3 space-x-reverse">
             <span class="text-emerald-400 font-black text-xl">بنيان</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-bold hidden sm:inline-block">همة تحيي الأمة</span>
         </div>
         <nav class="hidden md:flex space-x-6 space-x-reverse text-sm text-slate-300">
             <a href="#" class="text-emerald-400 font-bold">الرئيسية</a>
             <a href="#habitsSection" class="hover:text-emerald-400 transition">رحلتي</a>
             <a href="#statsSection" class="hover:text-emerald-400 transition">إحصائيات</a>
-            <a href="#habitsSection" class="hover:text-emerald-400 transition">المهام</a>
-            <a href="#reportsSection" class="hover:text-emerald-400 transition">التقارير</a>
             <a href="javascript:void(0);" onclick="checkAdminAccess()" class="hover:text-emerald-400 text-amber-400 font-bold transition">المدير 🔐</a>
         </nav>
         <div class="flex items-center space-x-3 space-x-reverse">
+            <!-- يظهر قبل تسجيل الدخول -->
             <button onclick="openAuthModal()" id="authButtonNav" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition">
                 تسجيل الدخول / حساب جديد
             </button>
-            <div id="userProfileBadge" class="hidden flex items-center space-x-2 space-x-reverse bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
+            <!-- يظهر بعد تسجيل الدخول حسب طلبك -->
+            <div id="userProfileBadge" class="hidden flex items-center space-x-3 space-x-reverse bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
                 <span class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center font-bold text-xs" id="userInitialNav">س</span>
-                <span class="text-xs font-bold text-slate-200" id="userNameNav">المشارك</span>
+                <div class="text-right">
+                    <span class="block text-[11px] font-bold text-emerald-300" id="userNameNav">المشارك</span>
+                    <span class="block text-[9px] text-slate-400">اليوم الحالي مع بنيان</span>
+                </div>
                 <button onclick="logoutUser()" class="text-red-400 text-xs mr-2 hover:underline">خروج</button>
             </div>
         </div>
     </header>
 
+    <!-- الأبيات الشعرية تحت الهيدر مباشرة كما طلبت -->
+    <section class="bg-gradient-to-r from-slate-900 via-[#131c31] to-slate-900 border-b border-slate-800 py-6 px-4 text-center">
+        <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-emerald-300/90">
+            <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نحمل قلما .. نزرع فكرة</div>
+            <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نغرس حلما .. نترك أثرا</div>
+            <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">ننشر علما .. نبغي أجرا</div>
+            <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نبني جيلا .. يصنع فجرا</div>
+        </div>
+    </section>
+
     <!-- المحتوى الرئيسي -->
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 w-full">
 
-        <!-- نافذة الترحيب أو النبتة المتنامية -->
+        <!-- نافذة الترحيب (تختفي أوتوماتيكياً عند تسجيل الدخول) -->
         <div id="welcomeBannerContainer">
             <div id="welcomeModal" class="bg-gradient-to-r from-emerald-900/80 to-slate-900 text-slate-100 p-6 rounded-2xl shadow-lg border border-emerald-500/30 flex flex-col md:flex-row justify-between items-center relative">
                 <div class="flex items-center space-x-4 space-x-reverse mb-4 md:mb-0">
@@ -82,94 +99,55 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-lg text-emerald-400">أهلاً بك في رحلة التسعين يوماً!</h3>
-                        <p class="text-sm text-slate-300 mt-1">سجّل دخولك بحسابك لتتمكن من تتبع عاداتك اليومية وإرسال تقريرك المفصل للمشرف.</p>
+                        <p class="text-sm text-slate-300 mt-1">سجّل دخولك بحسابك لتتمكن من تتبع عاداتك وإرسال تقريرك اليومي.</p>
                     </div>
                 </div>
                 <div class="flex space-x-3 space-x-reverse">
                     <button onclick="openAuthModal()" class="bg-emerald-500 text-slate-950 px-4 py-2 rounded-xl text-sm font-bold hover:bg-emerald-400 transition shadow-lg">سجل دخولك الآن</button>
-                    <button onclick="dismissWelcomeBanner()" class="bg-slate-800 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition">تخطي مؤقتاً</button>
                 </div>
             </div>
         </div>
 
-        <!-- الهيدر الترحيبي وشريط التقدم العام للـ 90 يوماً -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-[#1E293B] p-8 rounded-3xl border border-slate-800 flex flex-col justify-between relative overflow-hidden">
-                <div class="absolute left-6 top-6 text-emerald-500/10 text-9xl font-black select-none">90</div>
-                <div>
-                    <span class="text-emerald-400 font-bold text-sm">#همة_تحيي_الأمة</span>
-                    <h1 class="text-4xl font-black mt-2">رحلة التسعين يوماً تصنع حياتك.</h1>
-                    <p class="text-slate-400 mt-2 max-w-lg">رحلة عملية لبناء العادات، وتعزيز الإيمان، وتحقيق التحول الحقيقي.</p>
-                    
-                    <!-- شريط التقدم العام للـ 90 يوماً -->
-                    <div class="mt-6 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                        <div class="flex justify-between items-center text-xs font-bold mb-2">
-                            <span class="text-emerald-400">تقدم الرحلة العامة</span>
-                            <span id="progressBarText" class="text-slate-300">اليوم 1 من أصل 90 يوماً (1%)</span>
-                        </div>
-                        <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
-                            <div id="progressBarFill" class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: 1%;"></div>
-                        </div>
-                    </div>
+        <!-- قسم مربعات الأيام -->
+        <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-emerald-400">🗺️ شبكة رحلة الـ 90 يوماً</h3>
+                <span id="currentActiveDayLabel" class="text-xs bg-slate-900 px-3 py-1 rounded-xl text-emerald-400 border border-slate-800 font-bold">اليوم النشط: 6</span>
+            </div>
+            <p class="text-xs text-slate-400 mb-6">الأيام السابقة مقفولة ومجراة، اليوم الحالي مفتوح للإرسال، والأيام القادمة مقفولة بانتظار فتح الأدمن.</p>
+            
+            <div id="daysGridContainer" class="grid grid-cols-5 sm:grid-cols-10 gap-3">
+                <!-- توليد الأيام ديناميكياً -->
+            </div>
+        </div>
 
-                    <div class="mt-4 pt-4 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <span class="text-emerald-400">▪</span>
-                            <span>نحمل قلما .. نزرع فكرة</span>
-                        </div>
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <span class="text-emerald-400">▪</span>
-                            <span>نغرس حلما .. نترك أثرا</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <button onclick="openAuthModal()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black px-6 py-3 rounded-2xl transition shadow-lg shadow-emerald-500/25">انضم وابدأ رحلتك</button>
-                </div>
+        <!-- قسم تعبئة الأيام الخمسة الأولى (بصياغة الفصحى وبضمير أنا) -->
+        <div id="initialFiveDaysSection" class="hidden bg-[#1E293B] p-8 rounded-3xl border border-amber-500/40 space-y-6">
+            <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30">
+                <h3 class="font-bold text-base text-amber-400">📌 مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
+                <p class="text-xs text-slate-300 mt-1">حدد مدى التزامك بالعادات لكل يوم من الأيام الخمسة الماضية بضمير المتكلم قبل الانتقال إلى اليوم السادس.</p>
+            </div>
+            
+            <div id="initialDaysFormContainer" class="space-y-6">
+                <!-- توليد الأيام 1 لـ 5 -->
             </div>
 
-            <!-- ملخص الإنجاز العام (ديناميكي) -->
-            <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 flex flex-col justify-center items-center">
-                <div class="relative w-32 h-32 flex items-center justify-center">
-                    <svg class="w-full h-full transform -rotate-90">
-                        <circle cx="64" cy="64" r="50" stroke="#334155" stroke-width="10" fill="transparent"></circle>
-                        <circle id="circleProgress" cx="64" cy="64" r="50" stroke="#10B981" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="314" fill="transparent" class="transition-all duration-1000"></circle>
-                    </svg>
-                    <div class="absolute text-center">
-                        <span id="statPercent" class="text-2xl font-black">0%</span>
-                        <span class="block text-xs text-slate-400">90 / اليوم</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-4 w-full mt-6 text-center text-xs border-t border-slate-800 pt-4">
-                    <div>
-                        <span id="statStreak" class="block font-bold text-emerald-400 text-base">0</span>
-                        <span class="text-slate-400">طول سلسلة</span>
-                    </div>
-                    <div>
-                        <span id="statTotalHabits" class="block font-bold text-white text-base">0</span>
-                        <span class="text-slate-400">إجمالي الإنجازات</span>
-                    </div>
-                    <div>
-                        <span id="statTaskRate" class="block font-bold text-white text-base">0%</span>
-                        <span class="text-slate-400">المهام المميزة</span>
-                    </div>
-                </div>
-            </div>
+            <button onclick="submitInitialFiveDays()" class="w-full bg-amber-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-amber-400 transition shadow-lg">حفظ تقارير الأيام الخمسة الأولى والتوجه لبيانات اليوم السادس</button>
         </div>
 
         <!-- قسم العادات اليومية التفصيلية -->
         <div id="habitsSection" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 bg-[#1E293B] p-6 rounded-3xl border border-slate-800 flex flex-col justify-between space-y-6">
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-emerald-400">📋 قائمة العادات اليومية التفصيلية</h3>
+                    <h3 class="font-bold text-lg mb-4 text-emerald-400">📋 تقرير اليوم الحالي (العادات اليومية)</h3>
                     
                     <div class="space-y-4">
                         <!-- 1. الاستيقاظ باكراً -->
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">⏰</span> 1️⃣ الاستيقاظ باكراً</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الاستيقاظ مع صلاة الفجر"><span>الاستيقاظ مع صلاة الفجر</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم العودة إلى الفراش"><span>عدم العودة إلى الفراش</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الاستيقاظ مع صلاة الفجر"><span>استيقظت مع صلاة الفجر</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم العودة إلى الفراش"><span>لم أعد إلى الفراش بعد الفجر</span></label>
                             </div>
                         </div>
 
@@ -177,9 +155,9 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📖</span> 2️⃣ الصلاة</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلوات الخمس في وقتها"><span>الصلوات الخمس في وقتها</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صلاة النوافل على حسب القدرة"><span>صلاة النوافل على حسب القدرة</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلاة في المسجد للرجال"><span>الصلاة في المسجد للرجال</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلوات الخمس في وقتها"><span>أديت الصلوات الخمس في وقتها</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صلاة النوافل على حسب القدرة"><span>حافضت على صلاة النوافل حسب استطاعتي</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلاة في المسجد للرجال"><span>أديت الصلاة في المسجد</span></label>
                             </div>
                         </div>
 
@@ -187,10 +165,10 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📿</span> 3️⃣ الأذكار</h4>
                             <div class="space-y-2 pr-4 text-xs grid grid-cols-1 sm:grid-cols-2">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار الصباح"><span>أذكار الصباح</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار المساء"><span>أذكار المساء</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار بعد الصلاة"><span>أذكار بعد الصلاة</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار النوم"><span>أذكار النوم</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار الصباح"><span>قرأت أذكار الصباح</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار المساء"><span>قرأت أذكار المساء</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار بعد الصلاة"><span>داومت على أذكار بعد الصلاة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار النوم"><span>قرأت أذكار النوم</span></label>
                             </div>
                         </div>
 
@@ -198,7 +176,7 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📚</span> 4️⃣ الورد القرآني</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صفحة واحدة على الأقل"><span>صفحة واحدة على الأقل</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صفحة واحدة على الأقل"><span>أتممت وردي القرآني (صفحة واحدة على الأقل)</span></label>
                             </div>
                         </div>
 
@@ -206,7 +184,7 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📖</span> 5️⃣ المطالعة</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="20 دقيقة قراءة"><span>20 دقيقة قراءة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="20 دقيقة قراءة"><span>قرأت لمدة 20 دقيقة على الأقل</span></label>
                             </div>
                         </div>
 
@@ -214,8 +192,8 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📱</span> 6️⃣ الهاتف</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="3 ساعات متواصلة دون هاتف"><span>3 ساعات متواصلة دون هاتف</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم استخدامه أثناء المهام المهمة"><span>عدم استخدامه أثناء المهام المهمة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="3 ساعات متواصلة دون هاتف"><span>ابتعدت عن الهاتف لـ 3 ساعات متواصلة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم استخدامه أثناء المهام المهمة"><span>تجنبت استخدامه أثناء إنجاز مهامي</span></label>
                             </div>
                         </div>
 
@@ -223,7 +201,7 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">🏃</span> 7️⃣ الحركة</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="30 دقيقة مشي أو تمارين رياضية"><span>30 دقيقة مشي أو تمارين رياضية</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="30 دقيقة مشي أو تمارين رياضية"><span>مارست المشي أو التمارين الرياضية لـ 30 دقيقة</span></label>
                             </div>
                         </div>
 
@@ -231,16 +209,16 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">🌙</span> 8️⃣ النوم</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="النوم في الوقت المحدد"><span>النوم في الوقت المحدد</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="إيقاف الهاتف قبل النوم بـ30 دقيقة"><span>إيقاف الهاتف قبل النوم بـ30 دقيقة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="النوم في الوقت المحدد"><span>نمْت في الوقت المحدد</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="إيقاف الهاتف قبل النوم بـ30 دقيقة"><span>أوقفت الهاتف قبل النوم بـ 30 دقيقة</span></label>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ملاحظات خاصة -->
+                    <!-- ملاحظات خاصة للإدارة -->
                     <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 mt-6">
-                        <label class="block text-xs font-bold text-emerald-400 mb-2">🔒 ملاحظات خاصة (ترسل للإدارة فقط):</label>
-                        <textarea id="dailyUserNote" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب ملاحظاتك السرية أو التحديات الخاصة لتصل للمشرف..."></textarea>
+                        <label class="block text-xs font-bold text-emerald-400 mb-2">🔒 ملاحظات خاصة (ترسل للإدارة والمشرف فقط):</label>
+                        <textarea id="dailyUserNote" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب ملاحظاتك السرية أو التحديات الخاصة لتصل للمشرف حصرياً..."></textarea>
                     </div>
 
                     <!-- خاطرة الحائط -->
@@ -249,7 +227,7 @@
                         <textarea id="communityThoughtInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500" placeholder="اكتب خاطرة أو فائدة لتلهم بها غيرك (ستنشر بعد موافقة المشرف)..."></textarea>
                     </div>
                 </div>
-                <button onclick="submitDailyReport()" class="w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-emerald-400 transition shadow-lg">حفظ وإرسال التقرير للمشرف</button>
+                <button onclick="submitDailyReport()" class="w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-emerald-400 transition shadow-lg">حفظ وإرسال التقرير اليومي للمشرف</button>
             </div>
 
             <!-- الجانب الأيمن -->
@@ -287,13 +265,13 @@
                     </div>
                 </div>
 
-                <!-- التقرير اليومي والعداد التنازلي -->
+                <!-- العداد التنازلي لمنتصف الليل -->
                 <div id="reportsSection" class="bg-gradient-to-br from-amber-500/20 to-slate-900 border border-amber-500/30 p-6 rounded-3xl text-slate-100">
                     <div class="flex items-center space-x-2 space-x-reverse mb-2">
                         <span class="text-lg">⏳</span>
-                        <h4 class="font-bold text-sm text-amber-400">آخر أجل لإرسال التقارير منتصف الليل</h4>
+                        <h4 class="font-bold text-sm text-amber-400">إغلاق اليوم أوتوماتيكياً عند منتصف الليل</h4>
                     </div>
-                    <p class="text-xs text-slate-300 mb-4">الوقت المتبقي لإرسال تقرير العادات والمهمة:</p>
+                    <p class="text-xs text-slate-300 mb-4">الوقت المتبقي لنهاية اليوم الحالي:</p>
                     
                     <div class="grid grid-cols-3 gap-2 text-center mb-4">
                         <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
@@ -309,18 +287,16 @@
                             <span class="text-[10px] text-slate-400">ثانية</span>
                         </div>
                     </div>
-
-                    <button onclick="submitDailyReport()" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-amber-400 transition shadow-lg shadow-amber-500/20">إرسال التقرير الشامل للمشرف</button>
                 </div>
             </div>
         </div>
 
-        <!-- قسم الإحصائيات (المنحنى البياني الديناميكي) -->
+        <!-- قسم الإحصائيات -->
         <div id="statsSection" class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h3 class="font-bold text-lg">إحصائيات التقدم والمنحنى البياني</h3>
-                    <p class="text-xs text-slate-400">معدل التزامك وتطور إنجازك خلال الأيام الماضية</p>
+                    <p class="text-xs text-slate-400">معدل التزامك وتطور إنجازك خلال الأيام التمهيدية واللاحقة</p>
                 </div>
             </div>
             <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 h-72 flex items-center justify-center">
@@ -330,7 +306,7 @@
 
     </main>
 
-    <!-- نافذة تسجيل الدخول / حساب جديد -->
+    <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور / تنبيه كلمة المرور الجديدة -->
     <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
             <div class="flex border-b border-slate-700 pb-3 mb-4">
@@ -338,8 +314,15 @@
                 <button onclick="switchAuthTab('register')" id="registerTabBtn" class="flex-1 font-bold text-sm text-slate-400 pb-1 transition">حساب جديد</button>
             </div>
 
+            <!-- تنبيه يظهر أوتوماتيكياً إذا تمت الموافقة على كلمة المرور الجديدة من طرف المشرف -->
+            <div id="newPasswordAlertBox" class="hidden bg-emerald-500/20 border border-emerald-500 p-3 rounded-xl mb-4 text-xs text-emerald-300">
+                <h4 class="font-bold mb-1">🎉 تمت الموافقة على طلب استعادة كلمة المرور!</h4>
+                <p>كلمة المرور الجديدة الخاصة بك هي: <b id="resolvedNewPassText" class="text-white bg-slate-950 px-2 py-0.5 rounded"></b></p>
+            </div>
+
+            <!-- نموذج تسجيل الدخول -->
             <div id="loginFormSection" class="space-y-3">
-                <h3 class="text-xs font-bold text-slate-300 mb-2">أهلاً بك مجدداً، سجّل دخولك لإرسال تقريرك المفصل:</h3>
+                <h3 class="text-xs font-bold text-slate-300 mb-2">أهلاً بك مجدداً، سجّل دخولك لإرسال تقريرك:</h3>
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">البريد الإلكتروني:</label>
                     <input type="email" id="loginEmail" placeholder="example@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
@@ -348,9 +331,25 @@
                     <label class="block text-[11px] text-slate-400 mb-1">كلمة المرور:</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
+                <div class="text-left">
+                    <a href="javascript:void(0);" onclick="showForgotPasswordSection()" class="text-[11px] text-emerald-400 hover:underline">هل نسيت كلمة المرور؟</a>
+                </div>
                 <button onclick="handleLogin()" class="w-full bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-emerald-600 transition mt-2">دخول المنصة</button>
             </div>
 
+            <!-- نموذج نسيت كلمة المرور -->
+            <div id="forgotPassSection" class="space-y-3 hidden">
+                <h3 class="text-xs font-bold text-amber-400 mb-2">🔑 استعادة كلمة المرور:</h3>
+                <p class="text-[11px] text-slate-300">أدخل بريدك الإلكتروني المسجل، وسنرسل طلب الاستعادة إلى المشرف ليقوم بمعالجته وتوفير كلمة المرور هنا:</p>
+                <div>
+                    <label class="block text-[11px] text-slate-400 mb-1">البريد الإلكتروني:</label>
+                    <input type="email" id="forgotEmailInput" placeholder="example@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <button onclick="submitForgotPasswordRequest()" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-amber-400 transition mt-2">إرسال الطلب للمشرف</button>
+                <button onclick="backToLoginTab()" class="w-full bg-slate-800 text-slate-300 py-2 rounded-xl text-xs hover:bg-slate-700 transition">العودة لتسجيل الدخول</button>
+            </div>
+
+            <!-- نموذج حساب جديد -->
             <div id="registerFormSection" class="space-y-3 hidden">
                 <h3 class="text-xs font-bold text-slate-300 mb-2">انضم لرحلة التسعين يوماً وسجّل بياناتك:</h3>
                 <div>
@@ -380,7 +379,7 @@
     <div id="adminLoginModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-sm w-full mx-4 text-slate-100 text-center">
             <h3 class="text-base font-bold text-emerald-400 mb-2">🔒 بوابة المشرفين</h3>
-            <p class="text-xs text-slate-400 mb-4">الرجاء إدخال رمز الدخول الخاص بالمشرفين لعرض التقارير التفصيلية.</p>
+            <p class="text-xs text-slate-400 mb-4">الرجاء إدخال رمز الدخول الخاص بالمشرفين لعرض لوحة التحكم.</p>
             <input type="password" id="adminPassword" placeholder="أدخل رمز المشرف هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-center text-white mb-4 focus:outline-none focus:border-emerald-500">
             <div class="flex space-x-2 space-x-reverse">
                 <button onclick="verifyAdminPassword()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-600 transition">دخول</button>
@@ -389,23 +388,66 @@
         </div>
     </div>
 
-    <!-- نافذة لوحة المدير -->
+    <!-- نافذة لوحة المدير الشاملة والمحدثة -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-4xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
+        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-5xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-emerald-400">🔐 لوحة تحكم المشرف</h3>
+                <h3 class="text-lg font-bold text-emerald-400">🔐 لوحة تحكم المشرف المتقدمة</h3>
                 <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕ إغلاق</button>
             </div>
-            
+
+            <!-- إدارة أدوات المشرف -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/30 flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-emerald-400">اليوم النشط الحالي: <span id="adminCurrentDayDisplay" class="font-bold text-white">6</span></h4>
+                        <p class="text-[10px] text-slate-300 mt-0.5">تقدم باليوم إلى الأمام للمشاركين</p>
+                    </div>
+                    <button onclick="adminOpenNextDay()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs hover:bg-emerald-400 transition shadow-lg">فتح اليوم الموالي ➔</button>
+                </div>
+
+                <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30 flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-amber-400">تصدير التقارير</h4>
+                        <p class="text-[10px] text-slate-300 mt-0.5">تحميل كافة تقارير المشاركين كملف Excel (CSV)</p>
+                    </div>
+                    <button onclick="exportReportsToExcel()" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs hover:bg-amber-400 transition shadow-lg">تصدير لـ Excel 📊</button>
+                </div>
+            </div>
+
+            <!-- تعديل كلمة مرور المشرف وإعادة تعيين النظام -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                <div>
+                    <h4 class="text-xs font-bold text-emerald-400 mb-2">⚙️ تعديل كلمة المرور الخاصة بالمشرف:</h4>
+                    <div class="flex space-x-2 space-x-reverse">
+                        <input type="password" id="newAdminPassInput" placeholder="كلمة المرور الجديدة" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white">
+                        <button onclick="updateAdminPassword()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs hover:bg-emerald-400 transition">تحديث</button>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-red-400 mb-2">⚠️ إعادة التعيين (مسح التجارب):</h4>
+                    <button onclick="resetSystemData()" class="w-full bg-red-500/20 text-red-400 border border-red-500/40 font-bold py-1.5 rounded-xl text-xs hover:bg-red-500 hover:text-white transition">مسح كل التجارب والبيانات التجريبية 🗑️</button>
+                </div>
+            </div>
+
+            <!-- طلبات استعادة كلمة المرور وتعيين الجديدة -->
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                <h4 class="text-xs font-bold text-amber-400 mb-3">🔑 طلبات استعادة كلمة المرور الواردة من المشاركين:</h4>
+                <div id="adminPasswordRequestsList" class="space-y-3">
+                    <p class="text-xs text-slate-400 italic">لا توجد طلبات استعادة كلمة مرور حالياً.</p>
+                </div>
+            </div>
+
+            <!-- جدول تقارير المشاركين -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
-                <h4 class="text-xs font-bold text-emerald-400 mb-3">تقارير وعادات والملاحظات الخاصة بالمشاركين:</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تقرير وعادات المشاركين العامة:</h4>
                 <table class="w-full text-right text-xs">
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400">
                             <th class="pb-2">المشارك والدفعة</th>
-                            <th class="pb-2">العادات المنجزة</th>
+                            <th class="pb-2">الأيام الخمسة الأولى</th>
+                            <th class="pb-2">العادات اليومية</th>
                             <th class="pb-2">مهمة اليوم</th>
-                            <th class="pb-2">الملاحظات الخاصة (للإدارة)</th>
                         </tr>
                     </thead>
                     <tbody id="adminReportsTableBody">
@@ -414,57 +456,35 @@
                 </table>
             </div>
 
+            <!-- الملاحظات الخاصة الواردة للإدارة فقط -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست (بانتظار الموافقة):</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3">🔒 الملاحظات الخاصة (ترسل للإدارة والمشرف فقط):</h4>
+                <div id="adminPrivateNotesList" class="space-y-3 max-h-40 overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>
+                </div>
+            </div>
+
+            <!-- مراجعة الخواطر للحائط -->
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست:</h4>
                 <div id="pendingThoughtsList" class="space-y-3">
                     <p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>
                 </div>
             </div>
 
-            <!-- زر إعادة تعيين المنصة وتفريغها للمشرف -->
-            <div class="bg-red-500/10 p-4 rounded-2xl border border-red-500/30 flex justify-between items-center">
-                <div>
-                    <h4 class="text-xs font-bold text-red-400">إعادة تعيين المنصة بالكامل (مسح التجربة):</h4>
-                    <p class="text-[10px] text-slate-400">يحذف جميع الحسابات التجريبية والخواطر لتكون المنصة نظيفة تماماً.</p>
-                </div>
-                <button onclick="resetPlatformData()" class="bg-red-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs hover:bg-red-400 transition">إعادة تعيين</button>
-            </div>
-
-            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <label class="block text-xs font-bold text-emerald-400 mb-2">تحديث "مهمة اليوم" للأعضاء:</label>
-                <textarea id="adminTaskInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب مهمة اليوم الجديدة هنا..."></textarea>
-                <button onclick="updateDailyTask()" class="mt-2 w-full bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-600 transition">نشر المهمة الجديدة فوراً</button>
-            </div>
-
-            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <label class="block text-xs font-bold text-amber-400 mb-2">🔑 تغيير كلمة سر المشرف:</label>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
-                    <input type="password" id="newAdminPass" placeholder="كلمة المرور الجديدة" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-amber-500">
-                    <input type="password" id="confirmAdminPass" placeholder="تأكيد كلمة المرور الجديدة" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:border-amber-500">
-                </div>
-                <button onclick="changeAdminPassword()" class="w-full bg-amber-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-amber-400 transition">حفظ كلمة المرور الجديدة</button>
-            </div>
-
-            <div class="flex space-x-3 space-x-reverse pt-2">
-                <button onclick="alert('تم تنزيل كشف التقارير الكامل بنجاح!')" class="flex-1 bg-slate-800 text-slate-200 font-bold py-2 rounded-xl text-xs hover:bg-slate-700 transition">تحميل السجل (Excel)</button>
-                <button onclick="closeAdminModal()" class="bg-emerald-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-600 transition">إغلاق اللوحة</button>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeAdminModal()" class="bg-emerald-500 text-slate-950 px-5 py-2 rounded-xl text-xs font-bold hover:bg-emerald-600 transition">إغلاق اللوحة</button>
             </div>
         </div>
     </div>
 
-    <!-- السكريبت البرمجي -->
+    <!-- السكريبت البرمجي المحدث والمتكامل -->
     <script>
         const messagesList = [
             { text: "والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك، لا تنتظر أي نتائج.", ref: "اقتباسات بنيانية" },
             { text: "الأمة بحاجة لأشخاص واعيين لا أشخاص يعانون من الهشاشة و يستسلمون ويتوقفون عند أول محطة.", ref: "اقتباسات بنيانية" },
             { text: "فمن عرف شرف ما يطلب هانت عليه التضحيات، هانت عليه راحته، وهان عليه نومه.", ref: "اقتباسات بنيانية" },
-            { text: "قيمتك مستمدة من خالقك.. مش من مكانك في طابور الناس. أقفل نوافذ الضجيج شوية، وإرجع اسمع صوتك إنت.", ref: "اقتباسات بنيانية" },
-            { text: "التوازن مش يعني تعطي كل مجال نفس الجهد بل تعطي كل مرحلة حقها في وقتها.", ref: "اقتباسات بنيانية" },
-            { text: "بنيان مش مجرد مجموعة من الأفراد وصايي بل فكر في حد ذاتو و هي عبارة عن قارب نجاة بالنسبة للعديد.", ref: "اقتباسات بنيانية" },
-            { text: "كل على ثغر، فلا تبرح ثغرك الذي أقامك الله فيه.", ref: "اقتباسات بنيانية" },
-            { text: "عُلُو الكعب بالهمم العوالي وعز المرء في سهر الليالي.", ref: "اقتباسات بنيانية" },
-            { text: "المبادرات التطوعية تكشف لك حقيقتك، وتكسر كذبة العجز. اصدم نفسك بقدراتك، واصدم غيرك بإبداعك.", ref: "اقتباسات بنيانية" },
-            { text: "النجاح (تحقق واش راك حاب دنيوياً) / الفلاح (تحقق واش را حاب ربي سبحانو منك).", ref: "اقتباسات بنيانية" }
+            { text: "قيمتك مستمدة من خالقك.. مش من مكانك في طابور الناس. أقفل نوافذ الضجيج شوية، وإرجع اسمع صوتك إنت.", ref: "اقتباسات بنيانية" }
         ];
 
         let progressChartInstance = null;
@@ -474,22 +494,528 @@
             document.getElementById('quoteBoxText').textContent = `"${randomMsg.text}"`;
             document.getElementById('quoteBoxRef').textContent = `— ${randomMsg.ref}`;
 
-            const savedTask = localStorage.getItem('bunianDailyTask');
-            if(savedTask) {
-                document.getElementById('displayDailyTask').textContent = savedTask;
-            }
-
+            checkMidnightAutoClose();
             checkUserSession();
+            renderDaysGrid();
             loadCommunityNotes();
             loadLeaderboard();
             startMidnightTimer();
             initOrUpdateChart([]);
         };
 
+        function checkMidnightAutoClose() {
+            const lastCheckDate = localStorage.getItem('bunian_last_midnight_check');
+            const todayStr = new Date().toDateString();
+            if (lastCheckDate !== todayStr) {
+                localStorage.setItem('bunian_last_midnight_check', todayStr);
+            }
+        }
+
+        function getGlobalActiveDay() {
+            return parseInt(localStorage.getItem('bunian_global_active_day')) || 6;
+        }
+
+        function renderDaysGrid() {
+            const container = document.getElementById('daysGridContainer');
+            container.innerHTML = '';
+            const activeDay = getGlobalActiveDay();
+            document.getElementById('currentActiveDayLabel').textContent = `اليوم النشط: ${activeDay}`;
+            document.getElementById('adminCurrentDayDisplay').textContent = activeDay;
+
+            for(let i = 1; i <= 90; i++) {
+                const card = document.createElement('div');
+                card.className = "p-3 rounded-xl text-center font-bold text-xs flex flex-col items-center justify-center border transition";
+                
+                let icon = '';
+                if(i < activeDay) {
+                    card.classList.add('completed');
+                    icon = '✅';
+                } else if(i === activeDay) {
+                    card.classList.add('active');
+                    icon = '📝';
+                } else {
+                    card.classList.add('locked');
+                    icon = '🔒';
+                }
+
+                card.innerHTML = `<span>اليوم ${i}</span><span class="text-[10px] mt-1">${icon}</span>`;
+                container.appendChild(card);
+            }
+        }
+
+        function renderInitialFiveDaysForm() {
+            const container = document.getElementById('initialDaysFormContainer');
+            container.innerHTML = '';
+
+            for(let i = 1; i <= 5; i++) {
+                const dayBox = document.createElement('div');
+                dayBox.className = "bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3";
+                dayBox.innerHTML = `
+                    <h4 class="font-bold text-sm text-emerald-400">📅 اليوم التمهيدي ${i}</h4>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">مدى التزامي بالعادات:</label>
+                        <select id="init_habits_${i}" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                            <option value="majority">التزمت بأغلب العادات</option>
+                            <option value="some">التزمت ببعض العادات</option>
+                            <option value="none">لم ألتزم بها نهائياً</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">مهمة اليوم الخاصة:</label>
+                        <select id="init_task_${i}" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white">
+                            <option value="done">أنجزتها ✓</option>
+                            <option value="not_done">لم أنجزها ✕</option>
+                        </select>
+                    </div>
+                `;
+                container.appendChild(dayBox);
+            }
+        }
+
+        function submitInitialFiveDays() {
+            const activeUserStr = localStorage.getItem('bunianActiveUser');
+            if(!activeUserStr) return;
+            let user = JSON.parse(activeUserStr);
+
+            let initialReports = [];
+            let chartHistory = [];
+            for(let i = 1; i <= 5; i++) {
+                const habitsStatus = document.getElementById(`init_habits_${i}`).value;
+                const taskStatus = document.getElementById(`init_task_${i}`).value;
+                initialReports.push({ day: i, habitsStatus, taskStatus });
+
+                let pct = 30;
+                if(habitsStatus === 'majority') pct = 85;
+                else if(habitsStatus === 'some') pct = 50;
+                chartHistory.push(pct);
+            }
+
+            user.initialFiveDaysDone = true;
+            user.initialReports = initialReports;
+            user.chartHistory = chartHistory;
+            user.score = (user.score || 0) + 25;
+
+            localStorage.setItem('bunianActiveUser', JSON.stringify(user));
+            updateUserInDatabase(user);
+
+            alert('تم حفظ تقارير الأيام الخمسة الأولى بنجاح وانعكست في المنحنى البياني! مرحباً بك في اليوم السادس.');
+            checkUserSession();
+        }
+
+        function updateUserInDatabase(user) {
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            usersList = usersList.map(u => u.email === user.email ? user : u);
+            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
+        }
+
+        function openAuthModal() { 
+            document.getElementById('authModal').classList.remove('hidden');
+            checkResolvedPasswordNotification();
+        }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
+        function checkResolvedPasswordNotification() {
+            const resolvedList = JSON.parse(localStorage.getItem('bunianResolvedPasswords') || '{}');
+            const emailInput = document.getElementById('loginEmail').value.trim();
+            const alertBox = document.getElementById('newPasswordAlertBox');
+            const passTextSpan = document.getElementById('resolvedNewPassText');
+
+            if (emailInput && resolvedList[emailInput]) {
+                passTextSpan.textContent = resolvedList[emailInput];
+                alertBox.classList.remove('hidden');
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('loginTabBtn');
+            const registerBtn = document.getElementById('registerTabBtn');
+            const loginSec = document.getElementById('loginFormSection');
+            const regSec = document.getElementById('registerFormSection');
+            const forgotSec = document.getElementById('forgotPassSection');
+
+            forgotSec.classList.add('hidden');
+            if(tab === 'login') {
+                loginBtn.className = "flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition";
+                registerBtn.className = "flex-1 font-bold text-sm text-slate-400 pb-1 transition";
+                loginSec.classList.remove('hidden');
+                regSec.classList.add('hidden');
+            } else {
+                registerBtn.className = "flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition";
+                loginBtn.className = "flex-1 font-bold text-sm text-slate-400 pb-1 transition";
+                regSec.classList.remove('hidden');
+                loginSec.classList.add('hidden');
+            }
+        }
+
+        function showForgotPasswordSection() {
+            document.getElementById('loginFormSection').classList.add('hidden');
+            document.getElementById('registerFormSection').classList.add('hidden');
+            document.getElementById('forgotPassSection').classList.remove('hidden');
+        }
+
+        function backToLoginTab() {
+            document.getElementById('forgotPassSection').classList.add('hidden');
+            document.getElementById('loginFormSection').classList.remove('hidden');
+        }
+
+        function submitForgotPasswordRequest() {
+            const email = document.getElementById('forgotEmailInput').value.trim();
+            if(!email) {
+                alert('الرجاء إدخال البريد الإلكتروني!');
+                return;
+            }
+            let reqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
+            reqs.push({ email, date: new Date().toLocaleString() });
+            localStorage.setItem('bunianPassRequests', JSON.stringify(reqs));
+            alert('تم إرسال طلب استعادة كلمة المرور إلى المشرف بنجاح.');
+            closeAuthModal();
+        }
+
+        function handleRegister() {
+            const fullName = document.getElementById('regFullName').value.trim();
+            const batch = document.getElementById('regBatch').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            if(!fullName || !batch || !email || !pass) {
+                alert('الرجاء تعبئة جميع الحقول المطلوبة!');
+                return;
+            }
+
+            const userData = { fullName, batch, email, pass, initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            usersList.push(userData);
+            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
+            localStorage.setItem('bunianActiveUser', JSON.stringify(userData));
+
+            alert(`تم إنشاء الحساب بنجاح! أهلاً بك يا ${fullName}.`);
+            closeAuthModal();
+            checkUserSession();
+            loadLeaderboard();
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if(!email || !pass) {
+                alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور!');
+                return;
+            }
+
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            const foundUser = usersList.find(u => u.email === email && u.pass === pass);
+
+            if(foundUser || email === "admin@bunian.dz") {
+                const activeUser = foundUser || { fullName: "المشرف العام", batch: "الإدارة", email: email, initialFiveDaysDone: true, habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
+                localStorage.setItem('bunianActiveUser', JSON.stringify(activeUser));
+                alert(`مرحباً بك مجدداً يا ${activeUser.fullName}!`);
+                closeAuthModal();
+                checkUserSession();
+                loadLeaderboard();
+            } else {
+                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+            }
+        }
+
+        function checkUserSession() {
+            const activeUserStr = localStorage.getItem('bunianActiveUser');
+            const initialSection = document.getElementById('initialFiveDaysSection');
+            const habitsSection = document.getElementById('habitsSection');
+            const welcomeBanner = document.getElementById('welcomeBannerContainer');
+
+            if(activeUserStr) {
+                const user = JSON.parse(activeUserStr);
+                
+                // إخفاء لافتة الترحيب بمجرد تسجيل الدخول
+                if(welcomeBanner) welcomeBanner.classList.add('hidden');
+
+                document.getElementById('authButtonNav').classList.add('hidden');
+                const badge = document.getElementById('userProfileBadge');
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+                document.getElementById('userNameNav').textContent = user.fullName;
+                document.getElementById('userInitialNav').textContent = user.fullName.charAt(0);
+
+                if(!user.initialFiveDaysDone && user.email !== "admin@bunian.dz") {
+                    initialSection.classList.remove('hidden');
+                    habitsSection.classList.add('hidden');
+                    renderInitialFiveDaysForm();
+                } else {
+                    initialSection.classList.add('hidden');
+                    habitsSection.classList.remove('hidden');
+                }
+
+                initOrUpdateChart(user.chartHistory || []);
+            } else {
+                // إظهار لافتة الترحيب إذا لم يكن المستخدم مسجلاً الدخول
+                if(welcomeBanner) welcomeBanner.classList.remove('hidden');
+
+                document.getElementById('authButtonNav').classList.remove('hidden');
+                document.getElementById('userProfileBadge').classList.add('hidden');
+                initialSection.classList.add('hidden');
+                habitsSection.classList.remove('hidden');
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('bunianActiveUser');
+            alert('تم تسجيل الخروج بنجاح.');
+            location.reload();
+        }
+
+        function submitDailyReport() {
+            const activeUserStr = localStorage.getItem('bunianActiveUser');
+            if(!activeUserStr) {
+                alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك!');
+                openAuthModal();
+                return;
+            }
+            let user = JSON.parse(activeUserStr);
+            
+            const checkedHabits = [];
+            document.querySelectorAll('.habit-sub:checked').forEach(cb => {
+                checkedHabits.push(cb.value);
+            });
+
+            user.habits = checkedHabits;
+            user.taskDone = document.getElementById('dailyTaskDoneCheck').checked;
+            user.dailyNote = document.getElementById('dailyUserNote').value.trim();
+            user.communityThought = document.getElementById('communityThoughtInput').value.trim();
+            
+            user.reportsCount = (user.reportsCount || 0) + 1;
+            user.streak = (user.streak || 0) + 1;
+
+            let calculatedScore = checkedHabits.length;
+            if(user.taskDone) calculatedScore += 3;
+            user.score = (user.score || 0) + calculatedScore;
+
+            let dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 9) * 100);
+            if(!user.chartHistory) user.chartHistory = [];
+            user.chartHistory.push(dayPercent);
+
+            localStorage.setItem('bunianActiveUser', JSON.stringify(user));
+            updateUserInDatabase(user);
+
+            if(user.dailyNote) {
+                let allNotes = JSON.parse(localStorage.getItem('bunianPrivateNotes') || '[]');
+                allNotes.push({ name: user.fullName, batch: user.batch, note: user.dailyNote, date: new Date().toLocaleString() });
+                localStorage.setItem('bunianPrivateNotes', JSON.stringify(allNotes));
+            }
+
+            alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
+            checkUserSession();
+            loadLeaderboard();
+        }
+
+        function adminOpenNextDay() {
+            let currentDay = getGlobalActiveDay();
+            if(currentDay < 90) {
+                currentDay += 1;
+                localStorage.setItem('bunian_global_active_day', currentDay);
+                renderDaysGrid();
+                document.getElementById('adminCurrentDayDisplay').textContent = currentDay;
+                alert(`تم فتح اليوم ${currentDay} بنجاح للمشاركين!`);
+            } else {
+                alert('لقد وصلتم إلى اليوم الأخير من الرحلة (90)!');
+            }
+        }
+
+        function exportReportsToExcel() {
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            if(usersList.length === 0) {
+                alert('لا توجد بيانات لتصديرها.');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "الاسم الكامل,رقم الدفعة,البريد الإلكتروني,النقاط الكلية,عدد التقارير\r\n";
+
+            usersList.forEach(u => {
+                csvContent += `"${u.fullName}","${u.batch}","${u.email}",${u.score || 0},${u.reportsCount || 0}\r\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "bunian_reports_90days.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function updateAdminPassword() {
+            const newPass = document.getElementById('newAdminPassInput').value.trim();
+            if(!newPass) {
+                alert('الرجاء إدخال كلمة المرور الجديدة!');
+                return;
+            }
+            localStorage.setItem('bunian_custom_admin_pass', newPass);
+            alert('تم تحديث كلمة مرور المشرف بنجاح!');
+            document.getElementById('newAdminPassInput').value = '';
+        }
+
+        function resetSystemData() {
+            if(confirm('هل أنت متأكد من رغبتك في مسح كل التجارب والبيانات والـ Cache نهائياً؟')) {
+                localStorage.clear();
+                alert('تمت عملية إعادة تعيين النظام بنجاح.');
+                location.reload();
+            }
+        }
+
+        function loadLeaderboard() {
+            const leaderboard = document.getElementById('leaderboardList');
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            if(usersList.length === 0) return;
+
+            usersList.sort((a, b) => (b.score || 0) - (a.score || 0));
+            leaderboard.innerHTML = '';
+            usersList.slice(0, 5).forEach((u, index) => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-slate-900/60 p-2 rounded-xl border border-slate-800/60 text-xs";
+                div.innerHTML = `<span class="font-bold text-white">${index + 1}. ${u.fullName} (${u.batch})</span><span class="text-emerald-400 font-bold">${u.score || 0} نقطة</span>`;
+                leaderboard.appendChild(div);
+            });
+        }
+
+        function loadCommunityNotes() {
+            const wall = document.getElementById('communityNotesWall');
+            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
+            if(approvedNotes.length === 0) return;
+
+            wall.innerHTML = '';
+            approvedNotes.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic";
+                div.innerHTML = `"${item.note}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${item.name}</span>`;
+                wall.appendChild(div);
+            });
+        }
+
+        function startMidnightTimer() {
+            function updateTimer() {
+                const now = new Date();
+                const midnight = new Date();
+                midnight.setHours(24, 0, 0, 0);
+                const diff = midnight - now;
+                if (diff <= 0) return;
+
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+            }
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function checkAdminAccess() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); document.getElementById('adminPassword').value = ''; }
+
+        function verifyAdminPassword() {
+            const enteredPass = document.getElementById('adminPassword').value;
+            const currentAdminPass = localStorage.getItem('bunian_custom_admin_pass') || 'admin2026';
+            if (enteredPass === currentAdminPass) {
+                closeAdminLoginModal();
+                loadAdminDashboardData();
+                document.getElementById('adminModal').classList.remove('hidden');
+            } else {
+                alert('رمز الدخول غير صحيح!');
+            }
+        }
+
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function loadAdminDashboardData() {
+            const tbody = document.getElementById('adminReportsTableBody');
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            if(usersList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">لا يوجد مشاركون مسجلون بعد.</td></tr>`;
+            } else {
+                tbody.innerHTML = '';
+                usersList.forEach(u => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-slate-800/50 align-top";
+                    tr.innerHTML = `
+                        <td class="py-3 font-bold text-white">${u.fullName} <span class="block text-[10px] text-emerald-400 font-normal">${u.batch}</span></td>
+                        <td class="py-3">${u.initialFiveDaysDone ? '✅ مكتمل' : '⏳ غير مكتمل'}</td>
+                        <td class="py-3">${u.habits ? u.habits.length + ' عادات' : '0'}</td>
+                        <td class="py-3">${u.taskDone ? '✓ أنجزها' : '✕'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            const reqsContainer = document.getElementById('adminPasswordRequestsList');
+            let passReqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
+            if(passReqs.length === 0) {
+                reqsContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد طلبات استعادة كلمة مرور حالياً.</p>`;
+            } else {
+                reqsContainer.innerHTML = '';
+                passReqs.forEach((req, idx) => {
+                    const div = document.createElement('div');
+                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs gap-2";
+                    div.innerHTML = `
+                        <span>البريد: <b class="text-amber-400">${req.email}</b> (${req.date})</span>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <input type="text" id="newPassFor_${idx}" placeholder="كلمة المرور الجديدة" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-white text-[11px]">
+                            <button onclick="resolvePassRequest('${req.email}', ${idx})" class="bg-emerald-500 text-slate-950 px-3 py-1 rounded-lg font-bold">إرسال وتوثيق ✓</button>
+                        </div>`;
+                    reqsContainer.appendChild(div);
+                });
+            }
+
+            const notesContainer = document.getElementById('adminPrivateNotesList');
+            let privNotes = JSON.parse(localStorage.getItem('bunianPrivateNotes') || '[]');
+            if(privNotes.length === 0) {
+                notesContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>`;
+            } else {
+                notesContainer.innerHTML = '';
+                privNotes.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300";
+                    div.innerHTML = `<b class="text-emerald-400">${item.name} (${item.batch}):</b> "${item.note}" <span class="block text-[9px] text-slate-500 mt-1">${item.date}</span>`;
+                    notesContainer.appendChild(div);
+                });
+            }
+        }
+
+        function resolvePassRequest(targetEmail, index) {
+            const passInput = document.getElementById(`newPassFor_${index}`).value.trim();
+            if(!passInput) {
+                alert('الرجاء كتابة كلمة المرور الجديدة أولاً!');
+                return;
+            }
+
+            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
+            usersList = usersList.map(u => {
+                if(u.email === targetEmail) {
+                    u.pass = passInput;
+                }
+                return u;
+            });
+            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
+
+            let resolvedList = JSON.parse(localStorage.getItem('bunianResolvedPasswords') || '{}');
+            resolvedList[targetEmail] = passInput;
+            localStorage.setItem('bunianResolvedPasswords', JSON.stringify(resolvedList));
+
+            let passReqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
+            passReqs.splice(index, 1);
+            localStorage.setItem('bunianPassRequests', JSON.stringify(passReqs));
+
+            alert(`تم تعيين وإرسال كلمة المرور للمشارك (${targetEmail}) بنجاح!`);
+            loadAdminDashboardData();
+        }
+
         function initOrUpdateChart(historyData) {
             const ctx = document.getElementById('progressChart').getContext('2d');
-            
-            let labels = historyData.length > 0 ? historyData.map((_, i) => `اليوم ${i + 1}`) : ['اليوم 1'];
+            let labels = historyData.length > 0 ? historyData.map((_, i) => i < 5 ? `تمهيدي ${i + 1}` : `اليوم ${i + 1}`) : ['البداية'];
             let dataPoints = historyData.length > 0 ? historyData : [0];
 
             if (progressChartInstance) {
@@ -516,9 +1042,6 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94A3B8', font: { family: 'Cairo' } } }
-                    },
                     scales: {
                         x: { ticks: { color: '#94A3B8' }, grid: { color: '#334155' } },
                         y: { ticks: { color: '#94A3B8' }, grid: { color: '#334155' }, min: 0, max: 100 }
@@ -526,433 +1049,7 @@
                 }
             });
         }
-
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-
-        function switchAuthTab(tab) {
-            const loginBtn = document.getElementById('loginTabBtn');
-            const registerBtn = document.getElementById('registerTabBtn');
-            const loginSec = document.getElementById('loginFormSection');
-            const regSec = document.getElementById('registerFormSection');
-
-            if(tab === 'login') {
-                loginBtn.className = "flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition";
-                registerBtn.className = "flex-1 font-bold text-sm text-slate-400 pb-1 transition";
-                loginSec.classList.remove('hidden');
-                regSec.classList.add('hidden');
-            } else {
-                registerBtn.className = "flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition";
-                loginBtn.className = "flex-1 font-bold text-sm text-slate-400 pb-1 transition";
-                regSec.classList.remove('hidden');
-                loginSec.classList.add('hidden');
-            }
-        }
-
-        function handleRegister() {
-            const fullName = document.getElementById('regFullName').value.trim();
-            const batch = document.getElementById('regBatch').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
-
-            if(!fullName || !batch || !email || !pass) {
-                alert('الرجاء تعبئة جميع الحقول المطلوبة!');
-                return;
-            }
-
-            const userData = { fullName, batch, email, habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, totalHabitsCount: 0, reportsCount: 0, chartHistory: [] };
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            usersList.push(userData);
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-            localStorage.setItem('bunianActiveUser', JSON.stringify(userData));
-
-            alert(`تم إنشاء الحساب بنجاح! أهلاً بك يا ${fullName}.`);
-            closeAuthModal();
-            checkUserSession();
-            loadLeaderboard();
-        }
-
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            if(!email || !pass) {
-                alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور!');
-                return;
-            }
-
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            const foundUser = usersList.find(u => u.email === email);
-
-            if(foundUser || email === "admin@bunian.dz") {
-                const activeUser = foundUser || { fullName: "المشرف العام", batch: "الإدارة", email: email, habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, totalHabitsCount: 0, reportsCount: 0, chartHistory: [] };
-                localStorage.setItem('bunianActiveUser', JSON.stringify(activeUser));
-                alert(`مرحباً بك مجدداً يا ${activeUser.fullName}!`);
-                closeAuthModal();
-                checkUserSession();
-                loadLeaderboard();
-            } else {
-                alert('البريد الإلكتروني غير مسجل، يرجى إنشاء حساب جديد أولاً.');
-            }
-        }
-
-        function checkUserSession() {
-            const activeUserStr = localStorage.getItem('bunianActiveUser');
-            if(activeUserStr) {
-                const user = JSON.parse(activeUserStr);
-                document.getElementById('authButtonNav').classList.add('hidden');
-                const badge = document.getElementById('userProfileBadge');
-                badge.classList.remove('hidden');
-                badge.classList.add('flex');
-                document.getElementById('userNameNav').textContent = user.fullName;
-                document.getElementById('userInitialNav').textContent = user.fullName.charAt(0);
-                
-                if(user.dailyNote) {
-                    document.getElementById('dailyUserNote').value = user.dailyNote;
-                }
-                if(user.communityThought) {
-                    document.getElementById('communityThoughtInput').value = user.communityThought;
-                }
-                if(user.taskDone) {
-                    document.getElementById('dailyTaskDoneCheck').checked = true;
-                }
-
-                const reportsCount = user.reportsCount || 0;
-                const percent = Math.min(Math.round((reportsCount / 90) * 100), 100);
-                
-                document.getElementById('progressBarText').textContent = `اليوم ${reportsCount} من أصل 90 يوماً (${percent}%)`;
-                document.getElementById('progressBarFill').style.width = `${percent}%`;
-
-                document.getElementById('statPercent').textContent = `${percent}%`;
-                const circleOffset = 314 - (314 * percent) / 100;
-                document.getElementById('circleProgress').style.strokeDashoffset = circleOffset;
-
-                document.getElementById('statStreak').textContent = user.streak || 0;
-                document.getElementById('statTotalHabits').textContent = user.totalHabitsCount || 0;
-                
-                const taskRate = reportsCount > 0 ? Math.round(((user.taskDoneCount || 0) / reportsCount) * 100) : 0;
-                document.getElementById('statTaskRate').textContent = `${taskRate}%`;
-
-                initOrUpdateChart(user.chartHistory || []);
-
-                let plantIcon = "🌱";
-                let plantStatus = "نبتة في بدايتها.. واصل السقي!";
-                const score = user.score || 0;
-                if(score > 15) {
-                    plantIcon = "🌳";
-                    plantStatus = "شجرة مثمرة يانعة.. أثرك عظيم!";
-                } else if(score > 5) {
-                    plantIcon = "🌿";
-                    plantStatus = "نبتة فتية تشتد عوداً كل يوم.. أحسنت!";
-                }
-
-                const container = document.getElementById('welcomeBannerContainer');
-                container.innerHTML = `
-                    <div class="bg-[#1E293B] text-slate-100 p-6 rounded-3xl border border-emerald-500/30 flex justify-between items-center shadow-lg">
-                        <div class="flex items-center space-x-4 space-x-reverse">
-                            <span class="text-4xl animate-bounce">${plantIcon}</span>
-                            <div>
-                                <h3 class="font-bold text-sm text-emerald-400">مرحباً بك يا ${user.fullName} (${user.batch})</h3>
-                                <p class="text-xs text-slate-300 mt-1">${plantStatus} (النقاط: ${score})</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-slate-900 px-3 py-2 rounded-xl text-emerald-400 font-bold border border-slate-800">اليوم ${reportsCount || 1}</span>
-                    </div>
-                `;
-            } else {
-                document.getElementById('authButtonNav').classList.remove('hidden');
-                document.getElementById('userProfileBadge').classList.add('hidden');
-                initOrUpdateChart([]);
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('bunianActiveUser');
-            alert('تم تسجيل الخروج بنجاح.');
-            location.reload();
-        }
-
-        function submitDailyReport() {
-            const activeUserStr = localStorage.getItem('bunianActiveUser');
-            if(!activeUserStr) {
-                alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك للمشرف!');
-                openAuthModal();
-                return;
-            }
-            const user = JSON.parse(activeUserStr);
-            
-            const checkedHabits = [];
-            document.querySelectorAll('.habit-sub:checked').forEach(cb => {
-                checkedHabits.push(cb.value);
-            });
-
-            user.habits = checkedHabits;
-            user.taskDone = document.getElementById('dailyTaskDoneCheck').checked;
-            user.dailyNote = document.getElementById('dailyUserNote').value.trim();
-            user.communityThought = document.getElementById('communityThoughtInput').value.trim();
-            
-            user.reportsCount = (user.reportsCount || 0) + 1;
-            user.streak = (user.streak || 0) + 1;
-            user.totalHabitsCount = (user.totalHabitsCount || 0) + checkedHabits.length;
-            if(user.taskDone) {
-                user.taskDoneCount = (user.taskDoneCount || 0) + 1;
-            }
-
-            let calculatedScore = checkedHabits.length;
-            if(user.taskDone) {
-                calculatedScore += 3;
-            }
-            user.score = (user.score || 0) + calculatedScore;
-
-            let dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 9) * 100);
-            if(!user.chartHistory) user.chartHistory = [];
-            user.chartHistory.push(dayPercent);
-            
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            usersList = usersList.map(u => u.email === user.email ? user : u);
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-            localStorage.setItem('bunianActiveUser', JSON.stringify(user));
-
-            alert(`تم إرسال تقريرك بنجاح وحصلت على ${calculatedScore} نقطة جديدة في رصيدك! ونمُت نبتتك أكثر 🌱✨`);
-            checkUserSession();
-            loadLeaderboard();
-        }
-
-        function loadLeaderboard() {
-            const leaderboard = document.getElementById('leaderboardList');
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            
-            if(usersList.length === 0) {
-                leaderboard.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">لا توجد تصدرات حالياً. ابدأ بإنجاز عاداتك لتعتلي القمة!</p>`;
-                return;
-            }
-
-            usersList.sort((a, b) => (b.score || 0) - (a.score || 0));
-
-            leaderboard.innerHTML = '';
-            usersList.slice(0, 5).forEach((u, index) => {
-                let plantStatus = `🌱 ${u.score || 0} نقطة`;
-                if((u.score || 0) > 15) plantStatus = `🌳 شجرة (${u.score} ن)`;
-                else if((u.score || 0) > 5) plantStatus = `🌿 فتية (${u.score} ن)`;
-
-                const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-slate-900/60 p-2 rounded-xl border border-slate-800/60 text-xs";
-                div.innerHTML = `
-                    <span class="font-bold text-white">${index + 1}. ${u.fullName} (${u.batch})</span>
-                    <span class="text-emerald-400 font-bold">${plantStatus}</span>
-                `;
-                leaderboard.appendChild(div);
-            });
-        }
-
-        function loadCommunityNotes() {
-            const wall = document.getElementById('communityNotesWall');
-            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
-            
-            if(approvedNotes.length === 0) {
-                wall.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-4">لا توجد خواطر منشورة حتى الآن. كن أول من يشارك خاطرة ملهمة!</p>`;
-                return;
-            }
-
-            wall.innerHTML = '';
-            approvedNotes.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic";
-                div.innerHTML = `"${item.note}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${item.name}</span>`;
-                wall.appendChild(div);
-            });
-        }
-
-        function dismissWelcomeBanner() {
-            document.getElementById('welcomeBannerContainer').style.display = 'none';
-        }
-
-        function startMidnightTimer() {
-            function updateTimer() {
-                const now = new Date();
-                const midnight = new Date();
-                midnight.setHours(24, 0, 0, 0);
-                const diff = midnight - now;
-
-                if (diff <= 0) return;
-
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
-            }
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        }
-
-        function checkAdminAccess() {
-            document.getElementById('adminLoginModal').classList.remove('hidden');
-        }
-
-        function closeAdminLoginModal() {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            document.getElementById('adminPassword').value = '';
-        }
-
-        function verifyAdminPassword() {
-            const enteredPass = document.getElementById('adminPassword').value;
-            const currentAdminPass = localStorage.getItem('bunianAdminPass') || 'admin2026';
-
-            if (enteredPass === currentAdminPass) {
-                closeAdminLoginModal();
-                loadAdminReportsTable();
-                loadPendingThoughts();
-                document.getElementById('adminModal').classList.remove('hidden');
-            } else {
-                alert('رمز الدخول غير صحيح!');
-                document.getElementById('adminPassword').value = '';
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        function resetPlatformData() {
-            if(confirm('هل أنت متأكد من رغبتك في إعادة تعيين المنصة ومسح جميع البيانات التجريبية؟')) {
-                localStorage.clear();
-                alert('تمت إعادة تعيين المنصة بنجاح وتفريغها تماماً!');
-                location.reload();
-            }
-        }
-
-        function loadAdminReportsTable() {
-            const tbody = document.getElementById('adminReportsTableBody');
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            
-            if(usersList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">لا يوجد مشاركون مسجلون بعد.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = '';
-            usersList.forEach(u => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-800/50 align-top";
-                
-                let habitsHtml = u.habits && u.habits.length > 0 
-                    ? u.habits.map(h => `<span class="bg-emerald-500/15 text-emerald-300 px-1.5 py-0.5 rounded text-[10px] inline-block m-0.5">${h}</span>`).join('') 
-                    : '<span class="text-slate-500">لم تحدد عادات</span>';
-
-                tr.innerHTML = `
-                    <td class="py-3 font-bold text-white">
-                        ${u.fullName}
-                        <span class="block text-[10px] text-emerald-400 font-normal">${u.batch} (نقاط: ${u.score || 0})</span>
-                    </td>
-                    <td class="py-3 max-w-xs">${habitsHtml}</td>
-                    <td class="py-3">
-                        ${u.taskDone ? '<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-lg text-[10px] font-bold">أنجزها ✓</span>' : '<span class="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-lg text-[10px]">لم ينجزها</span>'}
-                    </td>
-                    <td class="py-3 text-slate-300 italic max-w-xs">
-                        ${u.dailyNote ? `"${u.dailyNote}"` : '<span class="text-slate-500 not-italic">لا توجد ملاحظات</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function loadPendingThoughts() {
-            const container = document.getElementById('pendingThoughtsList');
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            let pending = usersList.filter(u => u.communityThought && u.communityThought.trim() !== "");
-
-            if(pending.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>`;
-                return;
-            }
-
-            container.innerHTML = '';
-            pending.forEach((u) => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2";
-                div.innerHTML = `
-                    <div>
-                        <span class="text-xs font-bold text-emerald-400">${u.fullName} (${u.batch}):</span>
-                        <p class="text-xs text-slate-200 italic mt-1">"${u.communityThought}"</p>
-                    </div>
-                    <div class="flex space-x-2 space-x-reverse">
-                        <button onclick="approveThought('${u.email}')" class="bg-emerald-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-400">موافقة ونشر</button>
-                        <button onclick="rejectThought('${u.email}')" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-500/30">رفض</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function approveThought(email) {
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            let user = usersList.find(u => u.email === email);
-            if(!user) return;
-
-            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
-            approvedNotes.unshift({ name: user.fullName, note: user.communityThought });
-            localStorage.setItem('bunianApprovedNotes', JSON.stringify(approvedNotes));
-
-            user.communityThought = "";
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-
-            alert('تم نشر الخاطرة في حائط إلهام البنيانيست بنجاح!');
-            loadPendingThoughts();
-            loadCommunityNotes();
-        }
-
-        function rejectThought(email) {
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            let user = usersList.find(u => u.email === email);
-            if(user) {
-                user.communityThought = "";
-                localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-                alert('تم رفض الخاطرة.');
-                loadPendingThoughts();
-            }
-        }
-
-        function updateDailyTask() {
-            const newTask = document.getElementById('adminTaskInput').value;
-            if(newTask.trim() !== "") {
-                document.getElementById('displayDailyTask').textContent = newTask;
-                localStorage.setItem('bunianDailyTask', newTask);
-                alert('تم تحديث مهمة اليوم بنجاح لجميع الأعضاء!');
-                closeAdminModal();
-            } else {
-                alert('الرجاء كتابة نص المهمة أولاً.');
-            }
-        }
-
-        function changeAdminPassword() {
-            const newPass = document.getElementById('newAdminPass').value.trim();
-            const confirmPass = document.getElementById('confirmAdminPass').value.trim();
-
-            if(!newPass || !confirmPass) {
-                alert('الرجاء تعبئة حقول كلمة المرور الجديدة!');
-                return;
-            }
-
-            if(newPass !== confirmPass) {
-                alert('كلمتا المرور غير متطابقتين!');
-                return;
-            }
-
-            localStorage.setItem('bunianAdminPass', newPass);
-            alert('تم تغيير كلمة سر المشرف بنجاح!');
-            document.getElementById('newAdminPass').value = '';
-            document.getElementById('confirmAdminPass').value = '';
-        }
     </script>
-
 </body>
 </html>
     
