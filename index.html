@@ -64,7 +64,7 @@
             <button onclick="openAuthModal()" id="authButtonNav" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition">
                 تسجيل الدخول / حساب جديد
             </button>
-            <!-- يظهر بعد تسجيل الدخول حسب طلبك -->
+            <!-- يظهر بعد تسجيل الدخول -->
             <div id="userProfileBadge" class="hidden flex items-center space-x-3 space-x-reverse bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
                 <span class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center font-bold text-xs" id="userInitialNav">س</span>
                 <div class="text-right">
@@ -76,7 +76,7 @@
         </div>
     </header>
 
-    <!-- الأبيات الشعرية تحت الهيدر مباشرة كما طلبت -->
+    <!-- الأبيات الشعرية تحت الهيدر مباشرة -->
     <section class="bg-gradient-to-r from-slate-900 via-[#131c31] to-slate-900 border-b border-slate-800 py-6 px-4 text-center">
         <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-emerald-300/90">
             <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نحمل قلما .. نزرع فكرة</div>
@@ -89,7 +89,7 @@
     <!-- المحتوى الرئيسي -->
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 w-full">
 
-        <!-- نافذة الترحيب (تختفي أوتوماتيكياً عند تسجيل الدخول) -->
+        <!-- نافذة الترحيب -->
         <div id="welcomeBannerContainer">
             <div id="welcomeModal" class="bg-gradient-to-r from-emerald-900/80 to-slate-900 text-slate-100 p-6 rounded-2xl shadow-lg border border-emerald-500/30 flex flex-col md:flex-row justify-between items-center relative">
                 <div class="flex items-center space-x-4 space-x-reverse mb-4 md:mb-0">
@@ -121,7 +121,7 @@
             </div>
         </div>
 
-        <!-- قسم تعبئة الأيام الخمسة الأولى (بصياغة الفصحى وبضمير أنا) -->
+        <!-- قسم تعبئة الأيام الخمسة الأولى -->
         <div id="initialFiveDaysSection" class="hidden bg-[#1E293B] p-8 rounded-3xl border border-amber-500/40 space-y-6">
             <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30">
                 <h3 class="font-bold text-base text-amber-400">📌 مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
@@ -232,11 +232,9 @@
 
             <!-- الجانب الأيمن -->
             <div class="space-y-6">
-                <!-- اقتباسات بنيانية -->
+                <!-- اقتباسات متجددة -->
                 <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
-                    <h4 class="text-sm font-bold text-slate-400 mb-2">اقتباسات بنيانية</h4>
                     <p id="quoteBoxText" class="text-sm italic text-slate-300">"والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك."</p>
-                    <span id="quoteBoxRef" class="block text-xs text-slate-500 mt-2">— بنيان</span>
                 </div>
 
                 <!-- مهمة اليوم -->
@@ -265,27 +263,15 @@
                     </div>
                 </div>
 
-                <!-- العداد التنازلي لمنتصف الليل -->
-                <div id="reportsSection" class="bg-gradient-to-br from-amber-500/20 to-slate-900 border border-amber-500/30 p-6 rounded-3xl text-slate-100">
-                    <div class="flex items-center space-x-2 space-x-reverse mb-2">
+                <!-- تذكير بآخر أجل لإرسال التحدي -->
+                <div id="reportsSection" class="bg-gradient-to-br from-amber-500/20 to-slate-900 border border-amber-500/30 p-6 rounded-3xl text-slate-100 text-center space-y-2">
+                    <div class="flex items-center justify-center space-x-2 space-x-reverse mb-1">
                         <span class="text-lg">⏳</span>
-                        <h4 class="font-bold text-sm text-amber-400">إغلاق اليوم أوتوماتيكياً عند منتصف الليل</h4>
+                        <h4 class="font-bold text-sm text-amber-400">تذكير هام</h4>
                     </div>
-                    <p class="text-xs text-slate-300 mb-4">الوقت المتبقي لنهاية اليوم الحالي:</p>
-                    
-                    <div class="grid grid-cols-3 gap-2 text-center mb-4">
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                            <span id="timerHours" class="block text-lg font-black text-amber-400">00</span>
-                            <span class="text-[10px] text-slate-400">ساعة</span>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                            <span id="timerMinutes" class="block text-lg font-black text-amber-400">00</span>
-                            <span class="text-[10px] text-slate-400">دقيقة</span>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800">
-                            <span id="timerSeconds" class="block text-lg font-black text-amber-400">00</span>
-                            <span class="text-[10px] text-slate-400">ثانية</span>
-                        </div>
+                    <p class="text-xs text-slate-300">آخر أجل لإرسال التحدي وإتمام تقرير اليوم هو:</p>
+                    <div class="bg-slate-900/80 py-2 px-4 rounded-xl border border-slate-800 inline-block font-black text-amber-400 text-sm">
+                        00:00 ليلاً
                     </div>
                 </div>
             </div>
@@ -306,7 +292,7 @@
 
     </main>
 
-    <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور / تنبيه كلمة المرور الجديدة -->
+    <!-- نافذة تسجيل الدخول / حساب جديد -->
     <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
             <div class="flex border-b border-slate-700 pb-3 mb-4">
@@ -314,7 +300,7 @@
                 <button onclick="switchAuthTab('register')" id="registerTabBtn" class="flex-1 font-bold text-sm text-slate-400 pb-1 transition">حساب جديد</button>
             </div>
 
-            <!-- تنبيه يظهر أوتوماتيكياً إذا تمت الموافقة على كلمة المرور الجديدة من طرف المشرف -->
+            <!-- تنبيه استعادة كلمة المرور -->
             <div id="newPasswordAlertBox" class="hidden bg-emerald-500/20 border border-emerald-500 p-3 rounded-xl mb-4 text-xs text-emerald-300">
                 <h4 class="font-bold mb-1">🎉 تمت الموافقة على طلب استعادة كلمة المرور!</h4>
                 <p>كلمة المرور الجديدة الخاصة بك هي: <b id="resolvedNewPassText" class="text-white bg-slate-950 px-2 py-0.5 rounded"></b></p>
@@ -388,15 +374,15 @@
         </div>
     </div>
 
-    <!-- نافذة لوحة المدير الشاملة والمحدثة -->
+    <!-- نافذة لوحة المدير الشاملة والمحدثة مع تفاصيل العادات -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-5xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
+        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-6xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-lg font-bold text-emerald-400">🔐 لوحة تحكم المشرف المتقدمة</h3>
                 <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕ إغلاق</button>
             </div>
 
-            <!-- إدارة أدوات المشرف -->
+            <!-- إدارة أدوات المشرف واليوم النشط -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/30 flex justify-between items-center">
                     <div>
@@ -415,6 +401,16 @@
                 </div>
             </div>
 
+            <!-- قسم نشر وتحديث مهمة اليوم من طرف المشرف -->
+            <div class="bg-gradient-to-br from-emerald-500/10 to-slate-900 p-4 rounded-2xl border border-emerald-500/30 space-y-3">
+                <h4 class="text-xs font-bold text-emerald-400 flex items-center"><span>🎯</span> نشر وتحديث "مهمة اليوم" للمشاركين:</h4>
+                <p class="text-[11px] text-slate-300">اكتب تفاصيل مهمة اليوم الجديدة لتظهر فوراً لجميع المشاركين في واجهتهم الرئيسية:</p>
+                <textarea id="adminDailyTaskInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب مهمة اليوم هنا..."></textarea>
+                <div class="text-left">
+                    <button onclick="publishDailyTaskByAdmin()" class="bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs hover:bg-emerald-400 transition shadow-lg">نشر المهمة الآن للمشاركين ✓</button>
+                </div>
+            </div>
+
             <!-- تعديل كلمة مرور المشرف وإعادة تعيين النظام -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
                 <div>
@@ -430,7 +426,7 @@
                 </div>
             </div>
 
-            <!-- طلبات استعادة كلمة المرور وتعيين الجديدة -->
+            <!-- طلبات استعادة كلمة المرور -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
                 <h4 class="text-xs font-bold text-amber-400 mb-3">🔑 طلبات استعادة كلمة المرور الواردة من المشاركين:</h4>
                 <div id="adminPasswordRequestsList" class="space-y-3">
@@ -438,15 +434,15 @@
                 </div>
             </div>
 
-            <!-- جدول تقارير المشاركين -->
+            <!-- جدول تقارير المشاركين وعاداتهم بالتفصيل -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
-                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تقرير وعادات المشاركين العامة:</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تفصيل العادات التي أجزها المشاركون والتي لم ينجزوها:</h4>
                 <table class="w-full text-right text-xs">
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400">
                             <th class="pb-2">المشارك والدفعة</th>
-                            <th class="pb-2">الأيام الخمسة الأولى</th>
-                            <th class="pb-2">العادات اليومية</th>
+                            <th class="pb-2">العادات المنجزة (✓)</th>
+                            <th class="pb-2">العادات غير المنجزة (✕)</th>
                             <th class="pb-2">مهمة اليوم</th>
                         </tr>
                     </thead>
@@ -481,10 +477,36 @@
     <!-- السكريبت البرمجي المحدث والمتكامل -->
     <script>
         const messagesList = [
-            { text: "والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك، لا تنتظر أي نتائج.", ref: "اقتباسات بنيانية" },
-            { text: "الأمة بحاجة لأشخاص واعيين لا أشخاص يعانون من الهشاشة و يستسلمون ويتوقفون عند أول محطة.", ref: "اقتباسات بنيانية" },
-            { text: "فمن عرف شرف ما يطلب هانت عليه التضحيات، هانت عليه راحته، وهان عليه نومه.", ref: "اقتباسات بنيانية" },
-            { text: "قيمتك مستمدة من خالقك.. مش من مكانك في طابور الناس. أقفل نوافذ الضجيج شوية، وإرجع اسمع صوتك إنت.", ref: "اقتباسات بنيانية" }
+            { text: "الفراغ ... يُوهن العزم، ويحجب القلب بأستار الغم، ويجعله صيدا سهلا لمكائد الشيطان، وخطرات السوء." },
+            { text: "والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك، لا تنتظر أي نتائج." },
+            { text: "الأمة بحاجة لأشخاص واعيين لا أشخاص يعانون من الهشاشة و يستسلمون ويتوقفون عند أول محطة." },
+            { text: "فمن عرف شرف ما يطلب هانت عليه التضحيات، هانت عليه راحته، وهان عليه نومه." },
+            { text: "قيمتك مستمدة من خالقك.. مش من مكانك في طابور الناس. أقفل نوافذ الضجيج شوية، وإرجع اسمع صوتك إنت." },
+            { text: "الإنسان غالبا لا يعرف إمكاناته إلا بالتجربة، والمبادرات التطوعية أفضل مساحة للاكتشاف والتطوير." },
+            { text: "كن على ثغر، فلا تبرح ثغرك الذي أقامك الله فيه؛ فإني أخشى أن يكون من التولي يوم الزحف." },
+            { text: "عُلُو الكعب بالهمم العوالي وعز المرء في سهر الليالي." },
+            { text: "إن أردت أن يعود لك القلب الطيب، فارجع إلى القرآن بصدق، وافتحه بنية صادقة، ودعه يلامسك كما يلامس الماء العطشان." },
+            { text: "التوازن مش يعني تعطي كل مجال نفس الجهد بل تعطي كل مرحلة حقها في وقتها." }
+        ];
+
+        // قائمة جميع العادات الكلية المتاحة في المنصة لتفصيلها للمشرف
+        const allPossibleHabits = [
+            "الاستيقاظ مع صلاة الفجر",
+            "عدم العودة إلى الفراش",
+            "الصلوات الخمس في وقتها",
+            "صلاة النوافل على حسب القدرة",
+            "الصلاة في المسجد للرجال",
+            "أذكار الصباح",
+            "أذكار المساء",
+            "أذكار بعد الصلاة",
+            "أذكار النوم",
+            "صفحة واحدة على الأقل",
+            "20 دقيقة قراءة",
+            "3 ساعات متواصلة دون هاتف",
+            "عدم استخدامه أثناء المهام المهمة",
+            "30 دقيقة مشي أو تمارين رياضية",
+            "النوم في الوقت المحدد",
+            "إيقاف الهاتف قبل النوم بـ30 دقيقة"
         ];
 
         let progressChartInstance = null;
@@ -492,14 +514,13 @@
         window.onload = function() {
             const randomMsg = messagesList[Math.floor(Math.random() * messagesList.length)];
             document.getElementById('quoteBoxText').textContent = `"${randomMsg.text}"`;
-            document.getElementById('quoteBoxRef').textContent = `— ${randomMsg.ref}`;
 
             checkMidnightAutoClose();
             checkUserSession();
             renderDaysGrid();
             loadCommunityNotes();
             loadLeaderboard();
-            startMidnightTimer();
+            loadPublishedDailyTask();
             initOrUpdateChart([]);
         };
 
@@ -513,6 +534,25 @@
 
         function getGlobalActiveDay() {
             return parseInt(localStorage.getItem('bunian_global_active_day')) || 6;
+        }
+
+        function loadPublishedDailyTask() {
+            const savedTask = localStorage.getItem('bunian_current_daily_task');
+            if (savedTask) {
+                document.getElementById('displayDailyTask').textContent = savedTask;
+            }
+        }
+
+        function publishDailyTaskByAdmin() {
+            const taskText = document.getElementById('adminDailyTaskInput').value.trim();
+            if (!taskText) {
+                alert('الرجاء كتابة نص مهمة اليوم أولاً!');
+                return;
+            }
+            localStorage.setItem('bunian_current_daily_task', taskText);
+            loadPublishedDailyTask();
+            alert('تم نشر مهمة اليوم بنجاح وستظهر فوراً لجميع المشاركين في واجهاتهم الرئيسية!');
+            document.getElementById('adminDailyTaskInput').value = '';
         }
 
         function renderDaysGrid() {
@@ -729,7 +769,6 @@
             if(activeUserStr) {
                 const user = JSON.parse(activeUserStr);
                 
-                // إخفاء لافتة الترحيب بمجرد تسجيل الدخول
                 if(welcomeBanner) welcomeBanner.classList.add('hidden');
 
                 document.getElementById('authButtonNav').classList.add('hidden');
@@ -750,7 +789,6 @@
 
                 initOrUpdateChart(user.chartHistory || []);
             } else {
-                // إظهار لافتة الترحيب إذا لم يكن المستخدم مسجلاً الدخول
                 if(welcomeBanner) welcomeBanner.classList.remove('hidden');
 
                 document.getElementById('authButtonNav').classList.remove('hidden');
@@ -792,7 +830,7 @@
             if(user.taskDone) calculatedScore += 3;
             user.score = (user.score || 0) + calculatedScore;
 
-            let dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 9) * 100);
+            let dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 17) * 100);
             if(!user.chartHistory) user.chartHistory = [];
             user.chartHistory.push(dayPercent);
 
@@ -894,26 +932,6 @@
             });
         }
 
-        function startMidnightTimer() {
-            function updateTimer() {
-                const now = new Date();
-                const midnight = new Date();
-                midnight.setHours(24, 0, 0, 0);
-                const diff = midnight - now;
-                if (diff <= 0) return;
-
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
-            }
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        }
-
         function checkAdminAccess() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
         function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); document.getElementById('adminPassword').value = ''; }
 
@@ -939,13 +957,30 @@
             } else {
                 tbody.innerHTML = '';
                 usersList.forEach(u => {
+                    const userHabits = u.habits || [];
+                    
+                    // فرز العادات التي قام بها والتي لم يقم بها
+                    let doneHtml = "";
+                    let notDoneHtml = "";
+
+                    allPossibleHabits.forEach(habit => {
+                        if (userHabits.includes(habit)) {
+                            doneHtml += `<span class="block text-[11px] text-emerald-400">✓ ${habit}</span>`;
+                        } else {
+                            notDoneHtml += `<span class="block text-[11px] text-red-400/80">✕ ${habit}</span>`;
+                        }
+                    });
+
+                    if(doneHtml === "") doneHtml = '<span class="text-slate-500 italic">لم يسجل أي عادة بعد</span>';
+                    if(notDoneHtml === "") notDoneHtml = '<span class="text-emerald-400 italic">أنجز كل العادات!</span>';
+
                     const tr = document.createElement('tr');
                     tr.className = "border-b border-slate-800/50 align-top";
                     tr.innerHTML = `
                         <td class="py-3 font-bold text-white">${u.fullName} <span class="block text-[10px] text-emerald-400 font-normal">${u.batch}</span></td>
-                        <td class="py-3">${u.initialFiveDaysDone ? '✅ مكتمل' : '⏳ غير مكتمل'}</td>
-                        <td class="py-3">${u.habits ? u.habits.length + ' عادات' : '0'}</td>
-                        <td class="py-3">${u.taskDone ? '✓ أنجزها' : '✕'}</td>
+                        <td class="py-3 bg-emerald-950/20 p-2 rounded-xl">${doneHtml}</td>
+                        <td class="py-3 bg-red-950/10 p-2 rounded-xl">${notDoneHtml}</td>
+                        <td class="py-3 font-bold text-amber-400">${u.taskDone ? '✓ أنجزها' : '✕ لم ينجزها'}</td>
                     `;
                     tbody.appendChild(tr);
                 });
