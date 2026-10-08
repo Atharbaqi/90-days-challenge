@@ -374,7 +374,7 @@
         </div>
     </div>
 
-    <!-- نافذة لوحة المدير الشاملة والمحدثة مع تفاصيل العادات -->
+    <!-- نافذة لوحة المدير الشاملة والمحدثة مع نظام مراجعة الخواطر -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-6xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -462,7 +462,7 @@
 
             <!-- مراجعة الخواطر للحائط -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست:</h4>
+                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست (موافقة / رفض):</h4>
                 <div id="pendingThoughtsList" class="space-y-3">
                     <p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>
                 </div>
@@ -489,7 +489,6 @@
             { text: "التوازن مش يعني تعطي كل مجال نفس الجهد بل تعطي كل مرحلة حقها في وقتها." }
         ];
 
-        // قائمة جميع العادات الكلية المتاحة في المنصة لتفصيلها للمشرف
         const allPossibleHabits = [
             "الاستيقاظ مع صلاة الفجر",
             "عدم العودة إلى الفراش",
@@ -843,7 +842,14 @@
                 localStorage.setItem('bunianPrivateNotes', JSON.stringify(allNotes));
             }
 
-            alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
+            // إرسال الخاطرة إلى قائمة قيد المراجعة للمشرف
+            if(user.communityThought) {
+                let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
+                pendingThoughts.push({ id: Date.now(), name: user.fullName, batch: user.batch, note: user.communityThought, date: new Date().toLocaleString() });
+                localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
+            }
+
+            alert(`تم إرسال تقرير اليوم بنجاح وانعكست في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
             checkUserSession();
             loadLeaderboard();
         }
@@ -921,13 +927,16 @@
         function loadCommunityNotes() {
             const wall = document.getElementById('communityNotesWall');
             let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
-            if(approvedNotes.length === 0) return;
+            if(approvedNotes.length === 0) {
+                wall.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-4">لا توجد خواطر منشورة حتى الآن. كن أول من يشارك خاطرة ملهمة!</p>`;
+                return;
+            }
 
             wall.innerHTML = '';
             approvedNotes.forEach(item => {
                 const div = document.createElement('div');
                 div.className = "bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic";
-                div.innerHTML = `"${item.note}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${item.name}</span>`;
+                div.innerHTML = `"${item.note}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${item.name} (${item.batch})</span>`;
                 wall.appendChild(div);
             });
         }
@@ -958,8 +967,6 @@
                 tbody.innerHTML = '';
                 usersList.forEach(u => {
                     const userHabits = u.habits || [];
-                    
-                    // فرز العادات التي قام بها والتي لم يقم بها
                     let doneHtml = "";
                     let notDoneHtml = "";
 
@@ -1018,6 +1025,54 @@
                     notesContainer.appendChild(div);
                 });
             }
+
+            // عرض الخواطر المعلقة للمراجعة في لوحة المشرف
+            const pendingThoughtsContainer = document.getElementById('pendingThoughtsList');
+            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
+            if(pendingThoughts.length === 0) {
+                pendingThoughtsContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>`;
+            } else {
+                pendingThoughtsContainer.innerHTML = '';
+                pendingThoughts.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs gap-3";
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <b class="text-amber-400">${item.name} (${item.batch}):</b> "${item.note}"
+                            <span class="block text-[9px] text-slate-500 mt-1">${item.date}</span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button onclick="approveThought(${index})" class="bg-emerald-500 text-slate-950 px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-400 transition">موافقة ونشر ✓</button>
+                            <button onclick="rejectThought(${index})" class="bg-red-500/20 text-red-400 border border-red-500/40 px-3 py-1.5 rounded-lg font-bold hover:bg-red-500 hover:text-white transition">رفض ✕</button>
+                        </div>`;
+                    pendingThoughtsContainer.appendChild(div);
+                });
+            }
+        }
+
+        function approveThought(index) {
+            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
+            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
+
+            const thoughtToApprove = pendingThoughts[index];
+            approvedNotes.push(thoughtToApprove);
+            pendingThoughts.splice(index, 1);
+
+            localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
+            localStorage.setItem('bunianApprovedNotes', JSON.stringify(approvedNotes));
+
+            alert('تمت الموافقة على الخاطرة ونشرها بنجاح في حائط الإلهام!');
+            loadAdminDashboardData();
+            loadCommunityNotes();
+        }
+
+        function rejectThought(index) {
+            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
+            pendingThoughts.splice(index, 1);
+            localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
+
+            alert('تم رفض وحذف الخاطرة.');
+            loadAdminDashboardData();
         }
 
         function resolvePassRequest(targetEmail, index) {
