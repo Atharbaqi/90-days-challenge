@@ -40,6 +40,12 @@
     </script>
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #F8FAFC; scroll-behavior: smooth; }
+        .garden-plot { aspect-ratio: 1 / 1; border-radius: 0.85rem; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #3b2f22; background: linear-gradient(180deg,#2a2018,#1a130d); }
+        .garden-plot.planted { background: linear-gradient(180deg,#14532d33,#2a2018 70%); border-color:#10B98155; }
+        .garden-plot .plant { font-size: 1.6rem; line-height:1; animation: sprout .8s ease-out both; transform-origin: bottom center; }
+        .garden-plot .seed { font-size: .9rem; opacity:.35; }
+        .garden-plot small { font-size: 8px; color:#94A3B8; margin-top:2px; }
+        @keyframes sprout { from { transform: scale(0) translateY(10px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
         .day-card.active { border-color: #10B981; background: rgba(16, 185, 129, 0.1); }
         .day-card.completed { background: #1E293B; opacity: 0.7; }
         .day-card.locked { background: #0F172A; border-style: dashed; opacity: 0.4; cursor: not-allowed; }
@@ -48,10 +54,12 @@
 <body class="min-h-screen flex flex-col justify-between">
 
     <!-- شريط التنقل العلوي التفاعلي -->
-    <header class="bg-[#0F172A] border-b border-slate-800 py-4 px-6 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center space-x-3 space-x-reverse">
+    <header class="bg-[#0F172A] border-b border-slate-800 py-3 sm:py-4 px-4 sm:px-6 flex flex-wrap gap-y-2 justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2 flex-wrap">
             <span class="text-emerald-400 font-black text-xl">بنيان</span>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-bold hidden sm:inline-block">همة تحيي الأمة</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-bold inline-block">همة تحيي الأمة</span>
+            <!-- زر المدير للهاتف (يختفي في الشاشات الكبيرة لأنه موجود في القائمة) -->
+            <button onclick="checkAdminAccess()" class="md:hidden text-[11px] bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30 font-bold">المدير 🔐</button>
         </div>
         <nav class="hidden md:flex space-x-6 space-x-reverse text-sm text-slate-300">
             <a href="#" class="text-emerald-400 font-bold">الرئيسية</a>
@@ -64,7 +72,7 @@
             <button onclick="openAuthModal()" id="authButtonNav" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold transition">
                 تسجيل الدخول / حساب جديد
             </button>
-            <!-- يظهر بعد تسجيل الدخول -->
+            <!-- يظهر بعد تسجيل الدخول حسب طلبك -->
             <div id="userProfileBadge" class="hidden flex items-center space-x-3 space-x-reverse bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
                 <span class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center font-bold text-xs" id="userInitialNav">س</span>
                 <div class="text-right">
@@ -76,7 +84,7 @@
         </div>
     </header>
 
-    <!-- الأبيات الشعرية تحت الهيدر مباشرة -->
+    <!-- الأبيات الشعرية تحت الهيدر مباشرة كما طلبت -->
     <section class="bg-gradient-to-r from-slate-900 via-[#131c31] to-slate-900 border-b border-slate-800 py-6 px-4 text-center">
         <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-emerald-300/90">
             <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نحمل قلما .. نزرع فكرة</div>
@@ -89,7 +97,7 @@
     <!-- المحتوى الرئيسي -->
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 w-full">
 
-        <!-- نافذة الترحيب -->
+        <!-- نافذة الترحيب (تختفي أوتوماتيكياً عند تسجيل الدخول) -->
         <div id="welcomeBannerContainer">
             <div id="welcomeModal" class="bg-gradient-to-r from-emerald-900/80 to-slate-900 text-slate-100 p-6 rounded-2xl shadow-lg border border-emerald-500/30 flex flex-col md:flex-row justify-between items-center relative">
                 <div class="flex items-center space-x-4 space-x-reverse mb-4 md:mb-0">
@@ -121,7 +129,7 @@
             </div>
         </div>
 
-        <!-- قسم تعبئة الأيام الخمسة الأولى -->
+        <!-- قسم تعبئة الأيام الخمسة الأولى (بصياغة الفصحى وبضمير أنا) -->
         <div id="initialFiveDaysSection" class="hidden bg-[#1E293B] p-8 rounded-3xl border border-amber-500/40 space-y-6">
             <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30">
                 <h3 class="font-bold text-base text-amber-400">📌 مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
@@ -192,7 +200,7 @@
                         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                             <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📱</span> 6️⃣ الهاتف</h4>
                             <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="3 ساعات متواصلة دون هاتف"><span>ابتعدت عن الهاتف لـ 3 ساعات متواصلة</span></label>
+                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" id="phoneHabitCheck" class="habit-sub accent-emerald-500 w-4 h-4" value="3 ساعات متواصلة دون هاتف"><span id="phoneHabitLabel">ابتعدت عن الهاتف لـ 3 ساعات متواصلة</span></label>
                                 <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم استخدامه أثناء المهام المهمة"><span>تجنبت استخدامه أثناء إنجاز مهامي</span></label>
                             </div>
                         </div>
@@ -232,7 +240,7 @@
 
             <!-- الجانب الأيمن -->
             <div class="space-y-6">
-                <!-- اقتباسات متجددة -->
+                <!-- اقتباسات متجددة (من الـ PDF بدون عنوان) -->
                 <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
                     <p id="quoteBoxText" class="text-sm italic text-slate-300">"والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك."</p>
                 </div>
@@ -263,7 +271,7 @@
                     </div>
                 </div>
 
-                <!-- تذكير بآخر أجل لإرسال التحدي -->
+                <!-- تذكير بآخر أجل لإرسال التحدي (بديل المؤقت) -->
                 <div id="reportsSection" class="bg-gradient-to-br from-amber-500/20 to-slate-900 border border-amber-500/30 p-6 rounded-3xl text-slate-100 text-center space-y-2">
                     <div class="flex items-center justify-center space-x-2 space-x-reverse mb-1">
                         <span class="text-lg">⏳</span>
@@ -273,6 +281,17 @@
                     <div class="bg-slate-900/80 py-2 px-4 rounded-xl border border-slate-800 inline-block font-black text-amber-400 text-sm">
                         00:00 ليلاً
                     </div>
+                </div>
+
+                <!-- حديقة الرحلة: نبتة جديدة مع كل أسبوع -->
+                <div id="gardenSection" class="bg-gradient-to-b from-emerald-900/30 to-[#1E293B] border border-emerald-500/20 p-5 rounded-3xl">
+                    <div class="flex items-center justify-between mb-1">
+                        <h4 class="font-bold text-sm text-emerald-400">🌿 حديقة بنيان</h4>
+                        <span id="gardenCounter" class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">0 / 12</span>
+                    </div>
+                    <p id="gardenHint" class="text-[11px] text-slate-400 mb-3"></p>
+                    <div id="gardenGrid" class="grid grid-cols-4 gap-2"></div>
+                    <div id="gardenTree" class="mt-2 rounded-xl border border-dashed border-slate-700 bg-amber-950/20 py-3 text-center"></div>
                 </div>
             </div>
         </div>
@@ -292,7 +311,7 @@
 
     </main>
 
-    <!-- نافذة تسجيل الدخول / حساب جديد -->
+    <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور / تنبيه كلمة المرور الجديدة -->
     <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
             <div class="flex border-b border-slate-700 pb-3 mb-4">
@@ -300,7 +319,7 @@
                 <button onclick="switchAuthTab('register')" id="registerTabBtn" class="flex-1 font-bold text-sm text-slate-400 pb-1 transition">حساب جديد</button>
             </div>
 
-            <!-- تنبيه استعادة كلمة المرور -->
+            <!-- تنبيه يظهر أوتوماتيكياً إذا تمت الموافقة على كلمة المرور الجديدة من طرف المشرف -->
             <div id="newPasswordAlertBox" class="hidden bg-emerald-500/20 border border-emerald-500 p-3 rounded-xl mb-4 text-xs text-emerald-300">
                 <h4 class="font-bold mb-1">🎉 تمت الموافقة على طلب استعادة كلمة المرور!</h4>
                 <p>كلمة المرور الجديدة الخاصة بك هي: <b id="resolvedNewPassText" class="text-white bg-slate-950 px-2 py-0.5 rounded"></b></p>
@@ -326,12 +345,12 @@
             <!-- نموذج نسيت كلمة المرور -->
             <div id="forgotPassSection" class="space-y-3 hidden">
                 <h3 class="text-xs font-bold text-amber-400 mb-2">🔑 استعادة كلمة المرور:</h3>
-                <p class="text-[11px] text-slate-300">أدخل بريدك الإلكتروني المسجل، وسنرسل طلب الاستعادة إلى المشرف ليقوم بمعالجته وتوفير كلمة المرور هنا:</p>
+                <p class="text-[11px] text-slate-300">أدخل بريدك الإلكتروني المسجل، وسنرسل لك رابطاً لتعيين كلمة مرور جديدة على بريدك:</p>
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">البريد الإلكتروني:</label>
                     <input type="email" id="forgotEmailInput" placeholder="example@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
                 </div>
-                <button onclick="submitForgotPasswordRequest()" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-amber-400 transition mt-2">إرسال الطلب للمشرف</button>
+                <button onclick="submitForgotPasswordRequest()" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-amber-400 transition mt-2">إرسال رابط الاستعادة</button>
                 <button onclick="backToLoginTab()" class="w-full bg-slate-800 text-slate-300 py-2 rounded-xl text-xs hover:bg-slate-700 transition">العودة لتسجيل الدخول</button>
             </div>
 
@@ -374,15 +393,15 @@
         </div>
     </div>
 
-    <!-- نافذة لوحة المدير الشاملة والمحدثة مع نظام مراجعة الخواطر -->
+    <!-- نافذة لوحة المدير الشاملة والمحدثة -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-6xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
+        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-5xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-lg font-bold text-emerald-400">🔐 لوحة تحكم المشرف المتقدمة</h3>
                 <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕ إغلاق</button>
             </div>
 
-            <!-- إدارة أدوات المشرف واليوم النشط -->
+            <!-- إدارة أدوات المشرف -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/30 flex justify-between items-center">
                     <div>
@@ -401,13 +420,13 @@
                 </div>
             </div>
 
-            <!-- قسم نشر وتحديث مهمة اليوم من طرف المشرف -->
-            <div class="bg-gradient-to-br from-emerald-500/10 to-slate-900 p-4 rounded-2xl border border-emerald-500/30 space-y-3">
-                <h4 class="text-xs font-bold text-emerald-400 flex items-center"><span>🎯</span> نشر وتحديث "مهمة اليوم" للمشاركين:</h4>
-                <p class="text-[11px] text-slate-300">اكتب تفاصيل مهمة اليوم الجديدة لتظهر فوراً لجميع المشاركين في واجهتهم الرئيسية:</p>
-                <textarea id="adminDailyTaskInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب مهمة اليوم هنا..."></textarea>
-                <div class="text-left">
-                    <button onclick="publishDailyTaskByAdmin()" class="bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs hover:bg-emerald-400 transition shadow-lg">نشر المهمة الآن للمشاركين ✓</button>
+            <!-- تعديل مدة الابتعاد عن الهاتف -->
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                <h4 class="text-xs font-bold text-emerald-400 mb-2">📱 مدة الابتعاد عن الهاتف في خانة العادات (بالساعات):</h4>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="phoneHoursInput" min="1" max="12" value="3" class="w-24 bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white text-center">
+                    <button onclick="savePhoneHours()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs hover:bg-emerald-400 transition">حفظ</button>
+                    <span class="text-[10px] text-slate-400">النص الحالي: <b id="phoneHoursPreview" class="text-slate-200"></b></span>
                 </div>
             </div>
 
@@ -426,23 +445,23 @@
                 </div>
             </div>
 
-            <!-- طلبات استعادة كلمة المرور -->
+            <!-- طلبات استعادة كلمة المرور وتعيين الجديدة -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">🔑 طلبات استعادة كلمة المرور الواردة من المشاركين:</h4>
+                <h4 class="text-xs font-bold text-amber-400 mb-3">🔑 استعادة كلمة المرور:</h4>
                 <div id="adminPasswordRequestsList" class="space-y-3">
-                    <p class="text-xs text-slate-400 italic">لا توجد طلبات استعادة كلمة مرور حالياً.</p>
+                    <p class="text-xs text-slate-400 italic">صارت الاستعادة تلقائية: يصل المشارك رابط التعيين على بريده مباشرة، ولا حاجة لتدخلك.</p>
                 </div>
             </div>
 
-            <!-- جدول تقارير المشاركين وعاداتهم بالتفصيل -->
+            <!-- جدول تقارير المشاركين -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
-                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تفصيل العادات التي أجزها المشاركون والتي لم ينجزوها:</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تقرير وعادات المشاركين العامة:</h4>
                 <table class="w-full text-right text-xs">
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400">
                             <th class="pb-2">المشارك والدفعة</th>
-                            <th class="pb-2">العادات المنجزة (✓)</th>
-                            <th class="pb-2">العادات غير المنجزة (✕)</th>
+                            <th class="pb-2">الأيام الخمسة الأولى</th>
+                            <th class="pb-2">العادات اليومية</th>
                             <th class="pb-2">مهمة اليوم</th>
                         </tr>
                     </thead>
@@ -462,7 +481,7 @@
 
             <!-- مراجعة الخواطر للحائط -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست (موافقة / رفض):</h4>
+                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست:</h4>
                 <div id="pendingThoughtsList" class="space-y-3">
                     <p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>
                 </div>
@@ -475,7 +494,11 @@
     </div>
 
     <!-- السكريبت البرمجي المحدث والمتكامل -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script>
+        // الاقتباسات المستخرجة من ملف الـ PDF بدون عنوان
         const messagesList = [
             { text: "الفراغ ... يُوهن العزم، ويحجب القلب بأستار الغم، ويجعله صيدا سهلا لمكائد الشيطان، وخطرات السوء." },
             { text: "والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك، لا تنتظر أي نتائج." },
@@ -489,72 +512,84 @@
             { text: "التوازن مش يعني تعطي كل مجال نفس الجهد بل تعطي كل مرحلة حقها في وقتها." }
         ];
 
-        const allPossibleHabits = [
-            "الاستيقاظ مع صلاة الفجر",
-            "عدم العودة إلى الفراش",
-            "الصلوات الخمس في وقتها",
-            "صلاة النوافل على حسب القدرة",
-            "الصلاة في المسجد للرجال",
-            "أذكار الصباح",
-            "أذكار المساء",
-            "أذكار بعد الصلاة",
-            "أذكار النوم",
-            "صفحة واحدة على الأقل",
-            "20 دقيقة قراءة",
-            "3 ساعات متواصلة دون هاتف",
-            "عدم استخدامه أثناء المهام المهمة",
-            "30 دقيقة مشي أو تمارين رياضية",
-            "النوم في الوقت المحدد",
-            "إيقاف الهاتف قبل النوم بـ30 دقيقة"
-        ];
-
         let progressChartInstance = null;
 
         window.onload = function() {
             const randomMsg = messagesList[Math.floor(Math.random() * messagesList.length)];
             document.getElementById('quoteBoxText').textContent = `"${randomMsg.text}"`;
 
-            checkMidnightAutoClose();
-            checkUserSession();
+            applyPhoneHours();
             renderDaysGrid();
-            loadCommunityNotes();
-            loadLeaderboard();
-            loadPublishedDailyTask();
             initOrUpdateChart([]);
+            initFirebase();
         };
 
-        function checkMidnightAutoClose() {
-            const lastCheckDate = localStorage.getItem('bunian_last_midnight_check');
-            const todayStr = new Date().toDateString();
-            if (lastCheckDate !== todayStr) {
-                localStorage.setItem('bunian_last_midnight_check', todayStr);
-            }
+
+
+        // ===== مدة الابتعاد عن الهاتف (يعدّلها المشرف) =====
+        function hoursPhrase(h) {
+            if (h === 1) return 'ساعة واحدة';
+            if (h === 2) return 'ساعتين';
+            if (h >= 3 && h <= 10) return `${h} ساعات`;
+            return `${h} ساعة`;
+        }
+        function applyPhoneHours() {
+            let h = parseInt(appConfig.phoneHours);
+            if (!h || h < 1 || h > 12) h = 3;
+            const phrase = hoursPhrase(h);
+            const label = document.getElementById('phoneHabitLabel');
+            const check = document.getElementById('phoneHabitCheck');
+            const input = document.getElementById('phoneHoursInput');
+            const preview = document.getElementById('phoneHoursPreview');
+            if (label) label.textContent = `ابتعدت عن الهاتف لـ ${phrase} متواصلة`;
+            if (check) check.value = `${phrase} متواصلة دون هاتف`;
+            if (input) input.value = h;
+            if (preview) preview.textContent = `ابتعدت عن الهاتف لـ ${phrase} متواصلة`;
+        }
+        function savePhoneHours() {
+            const h = parseInt(document.getElementById('phoneHoursInput').value);
+            if (!h || h < 1 || h > 12) { alert('أدخل عدداً صحيحاً من الساعات بين 1 و 12.'); return; }
+            if (!isAdmin) { alert('للمشرف فقط.'); return; }
+            db.collection('config').doc('app').set({ phoneHours: h }, { merge: true }).catch(fbErr);
+            applyPhoneHours();
+            alert('تم تحديث مدة الابتعاد عن الهاتف في خانة العادات ✅');
         }
 
-        function getGlobalActiveDay() {
-            return parseInt(localStorage.getItem('bunian_global_active_day')) || 6;
-        }
-
-        function loadPublishedDailyTask() {
-            const savedTask = localStorage.getItem('bunian_current_daily_task');
-            if (savedTask) {
-                document.getElementById('displayDailyTask').textContent = savedTask;
+        // ===== حديقة بنيان: نبتة لكل أسبوع مكتمل =====
+        const GARDEN_PLANTS = ['🌱','🌿','☘️','🍀','🌾','🌷','🌼','🌻','🌺','🪴','🌹','🌸'];
+        function renderGarden() {
+            const grid = document.getElementById('gardenGrid');
+            if (!grid) return;
+            const activeDay = getGlobalActiveDay();
+            const completed = activeDay >= 90 ? 90 : Math.max(0, activeDay - 1);
+            const weeks = Math.min(12, Math.floor(completed / 7));
+            grid.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const plot = document.createElement('div');
+                if (i < weeks) {
+                    plot.className = 'garden-plot planted';
+                    plot.innerHTML = `<span class="plant" style="animation-delay:${i * 0.08}s">${GARDEN_PLANTS[i]}</span><small>أسبوع ${i + 1}</small>`;
+                } else {
+                    plot.className = 'garden-plot';
+                    plot.innerHTML = `<span class="seed">●</span><small>أسبوع ${i + 1}</small>`;
+                }
+                grid.appendChild(plot);
             }
-        }
-
-        function publishDailyTaskByAdmin() {
-            const taskText = document.getElementById('adminDailyTaskInput').value.trim();
-            if (!taskText) {
-                alert('الرجاء كتابة نص مهمة اليوم أولاً!');
-                return;
+            const tree = document.getElementById('gardenTree');
+            if (completed >= 90) {
+                tree.innerHTML = '<span class="plant text-3xl" style="display:inline-block;animation:sprout .9s ease-out both">🌳</span><p class="text-[11px] text-emerald-300 font-bold mt-1">اكتملت الحديقة! أتممتم التسعين يوماً 🎉</p>';
+            } else {
+                tree.innerHTML = '<span class="text-xl opacity-30">🌳</span><p class="text-[10px] text-slate-500 mt-1">شجرة بنيان تنبت عند إتمام اليوم التسعين</p>';
             }
-            localStorage.setItem('bunian_current_daily_task', taskText);
-            loadPublishedDailyTask();
-            alert('تم نشر مهمة اليوم بنجاح وستظهر فوراً لجميع المشاركين في واجهاتهم الرئيسية!');
-            document.getElementById('adminDailyTaskInput').value = '';
+            document.getElementById('gardenCounter').textContent = `${weeks} / 12`;
+            const hint = document.getElementById('gardenHint');
+            if (completed >= 90) hint.textContent = 'ثمرة تسعين يوماً من الهمة والاستمرار.';
+            else if (weeks < 12) hint.textContent = `بقي ${7 - (completed % 7)} أيام لتنبت نبتة جديدة.`;
+            else hint.textContent = `بقي ${90 - completed} أيام لتنبت شجرة بنيان.`;
         }
 
         function renderDaysGrid() {
+            renderGarden();
             const container = document.getElementById('daysGridContainer');
             container.innerHTML = '';
             const activeDay = getGlobalActiveDay();
@@ -611,61 +646,13 @@
             }
         }
 
-        function submitInitialFiveDays() {
-            const activeUserStr = localStorage.getItem('bunianActiveUser');
-            if(!activeUserStr) return;
-            let user = JSON.parse(activeUserStr);
 
-            let initialReports = [];
-            let chartHistory = [];
-            for(let i = 1; i <= 5; i++) {
-                const habitsStatus = document.getElementById(`init_habits_${i}`).value;
-                const taskStatus = document.getElementById(`init_task_${i}`).value;
-                initialReports.push({ day: i, habitsStatus, taskStatus });
-
-                let pct = 30;
-                if(habitsStatus === 'majority') pct = 85;
-                else if(habitsStatus === 'some') pct = 50;
-                chartHistory.push(pct);
-            }
-
-            user.initialFiveDaysDone = true;
-            user.initialReports = initialReports;
-            user.chartHistory = chartHistory;
-            user.score = (user.score || 0) + 25;
-
-            localStorage.setItem('bunianActiveUser', JSON.stringify(user));
-            updateUserInDatabase(user);
-
-            alert('تم حفظ تقارير الأيام الخمسة الأولى بنجاح وانعكست في المنحنى البياني! مرحباً بك في اليوم السادس.');
-            checkUserSession();
-        }
-
-        function updateUserInDatabase(user) {
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            usersList = usersList.map(u => u.email === user.email ? user : u);
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-        }
 
         function openAuthModal() { 
             document.getElementById('authModal').classList.remove('hidden');
-            checkResolvedPasswordNotification();
         }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
 
-        function checkResolvedPasswordNotification() {
-            const resolvedList = JSON.parse(localStorage.getItem('bunianResolvedPasswords') || '{}');
-            const emailInput = document.getElementById('loginEmail').value.trim();
-            const alertBox = document.getElementById('newPasswordAlertBox');
-            const passTextSpan = document.getElementById('resolvedNewPassText');
-
-            if (emailInput && resolvedList[emailInput]) {
-                passTextSpan.textContent = resolvedList[emailInput];
-                alertBox.classList.remove('hidden');
-            } else {
-                alertBox.classList.add('hidden');
-            }
-        }
 
         function switchAuthTab(tab) {
             const loginBtn = document.getElementById('loginTabBtn');
@@ -699,75 +686,19 @@
             document.getElementById('loginFormSection').classList.remove('hidden');
         }
 
-        function submitForgotPasswordRequest() {
-            const email = document.getElementById('forgotEmailInput').value.trim();
-            if(!email) {
-                alert('الرجاء إدخال البريد الإلكتروني!');
-                return;
-            }
-            let reqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
-            reqs.push({ email, date: new Date().toLocaleString() });
-            localStorage.setItem('bunianPassRequests', JSON.stringify(reqs));
-            alert('تم إرسال طلب استعادة كلمة المرور إلى المشرف بنجاح.');
-            closeAuthModal();
-        }
 
-        function handleRegister() {
-            const fullName = document.getElementById('regFullName').value.trim();
-            const batch = document.getElementById('regBatch').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
 
-            if(!fullName || !batch || !email || !pass) {
-                alert('الرجاء تعبئة جميع الحقول المطلوبة!');
-                return;
-            }
-
-            const userData = { fullName, batch, email, pass, initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            usersList.push(userData);
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-            localStorage.setItem('bunianActiveUser', JSON.stringify(userData));
-
-            alert(`تم إنشاء الحساب بنجاح! أهلاً بك يا ${fullName}.`);
-            closeAuthModal();
-            checkUserSession();
-            loadLeaderboard();
-        }
-
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            if(!email || !pass) {
-                alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور!');
-                return;
-            }
-
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            const foundUser = usersList.find(u => u.email === email && u.pass === pass);
-
-            if(foundUser || email === "admin@bunian.dz") {
-                const activeUser = foundUser || { fullName: "المشرف العام", batch: "الإدارة", email: email, initialFiveDaysDone: true, habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
-                localStorage.setItem('bunianActiveUser', JSON.stringify(activeUser));
-                alert(`مرحباً بك مجدداً يا ${activeUser.fullName}!`);
-                closeAuthModal();
-                checkUserSession();
-                loadLeaderboard();
-            } else {
-                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة.');
-            }
-        }
 
         function checkUserSession() {
-            const activeUserStr = localStorage.getItem('bunianActiveUser');
+            const activeUserStr = currentUser;
             const initialSection = document.getElementById('initialFiveDaysSection');
             const habitsSection = document.getElementById('habitsSection');
             const welcomeBanner = document.getElementById('welcomeBannerContainer');
 
             if(activeUserStr) {
-                const user = JSON.parse(activeUserStr);
+                const user = currentUser;
                 
+                // إخفاء لافتة الترحيب بمجرد تسجيل الدخول
                 if(welcomeBanner) welcomeBanner.classList.add('hidden');
 
                 document.getElementById('authButtonNav').classList.add('hidden');
@@ -777,7 +708,7 @@
                 document.getElementById('userNameNav').textContent = user.fullName;
                 document.getElementById('userInitialNav').textContent = user.fullName.charAt(0);
 
-                if(!user.initialFiveDaysDone && user.email !== "admin@bunian.dz") {
+                if(!user.initialFiveDaysDone && !isAdmin) {
                     initialSection.classList.remove('hidden');
                     habitsSection.classList.add('hidden');
                     renderInitialFiveDaysForm();
@@ -788,6 +719,7 @@
 
                 initOrUpdateChart(user.chartHistory || []);
             } else {
+                // إظهار لافتة الترحيب إذا لم يكن المستخدم مسجلاً الدخول
                 if(welcomeBanner) welcomeBanner.classList.remove('hidden');
 
                 document.getElementById('authButtonNav').classList.remove('hidden');
@@ -797,310 +729,260 @@
             }
         }
 
-        function logoutUser() {
-            localStorage.removeItem('bunianActiveUser');
-            alert('تم تسجيل الخروج بنجاح.');
-            location.reload();
+
+
+
+
+
+
+
+
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); document.getElementById('adminPassword').value = ''; }
+
+
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+
+
+        // ================= Firebase =================
+        // تم دمج إعدادات Firebase الخاصة بك مباشرة هنا
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkmt5UJ0bxO6vmzIWPcBeUDL13meCdbcg",
+            authDomain: "challenge-7af8b.firebaseapp.com",
+            projectId: "challenge-7af8b",
+            storageBucket: "challenge-7af8b.firebasestorage.app",
+            messagingSenderId: "711094697889",
+            appId: "1:711094697889:web:55fbdee191cdc1b98555e0"
+        };
+        firebase.initializeApp(firebaseConfig);
+        // بريد المشرف (بحروف صغيرة) — يجب أن يكون نفسه في ملف firestore.rules
+        const ADMIN_EMAIL = "algerianpositivevibes2021@gmail.com";
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null, isAdmin = false, registering = false, appConfig = {};
+
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        function fbErr(e) {
+            const m = {
+                'auth/email-already-in-use': 'هذا البريد مسجّل من قبل.',
+                'auth/invalid-credential': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                'auth/wrong-password': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                'auth/user-not-found': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                'auth/invalid-email': 'صيغة البريد الإلكتروني غير صحيحة.',
+                'auth/weak-password': 'كلمة المرور يجب ألا تقل عن 6 أحرف.',
+                'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً.',
+                'auth/requires-recent-login': 'سجّل الخروج ثم الدخول من جديد ثم أعد المحاولة.',
+                'permission-denied': 'ليست لديك صلاحية لهذا الإجراء.'
+            };
+            alert(m[e.code] || ('حدث خطأ: ' + (e.message || e)));
         }
 
-        function submitDailyReport() {
-            const activeUserStr = localStorage.getItem('bunianActiveUser');
-            if(!activeUserStr) {
-                alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك!');
-                openAuthModal();
-                return;
-            }
-            let user = JSON.parse(activeUserStr);
-            
-            const checkedHabits = [];
-            document.querySelectorAll('.habit-sub:checked').forEach(cb => {
-                checkedHabits.push(cb.value);
-            });
+        function newProfile(fullName, batch, email) {
+            return { fullName, batch, email, initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
+        }
+        function getGlobalActiveDay() { return parseInt(appConfig.activeDay) || 6; }
 
+        function initFirebase() {
+            db.collection('config').doc('app').onSnapshot(d => {
+                appConfig = d.exists ? d.data() : {};
+                applyPhoneHours();
+                renderDaysGrid();
+            }, console.error);
+            db.collection('leaderboard').orderBy('score', 'desc').limit(5).onSnapshot(s => renderLeaderboard(s.docs.map(d => d.data())), console.error);
+            db.collection('thoughts').where('approved', '==', true).onSnapshot(s => renderWall(s.docs.map(d => d.data())), console.error);
+
+            auth.onAuthStateChanged(async u => {
+                if (registering) return;
+                if (!u) { currentUser = null; isAdmin = false; checkUserSession(); return; }
+                try {
+                    const p = await db.collection('users').doc(u.uid).get();
+                    isAdmin = (u.email || '').toLowerCase() === ADMIN_EMAIL;
+                    currentUser = p.exists ? { uid: u.uid, ...p.data() } : { uid: u.uid, ...newProfile(isAdmin ? 'المشرف العام' : u.email, isAdmin ? 'الإدارة' : '', u.email), initialFiveDaysDone: isAdmin };
+                } catch (e) { console.error(e); }
+                checkUserSession();
+            });
+        }
+
+        function saveUser() {
+            const { uid, ...data } = currentUser;
+            return db.collection('users').doc(uid).set(data)
+                .then(() => db.collection('leaderboard').doc(uid).set({ fullName: data.fullName, batch: data.batch, score: data.score || 0 }));
+        }
+
+        // ---------- الحسابات ----------
+        async function handleRegister() {
+            const fullName = document.getElementById('regFullName').value.trim();
+            const batch = document.getElementById('regBatch').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+            if (!fullName || !batch || !email || !pass) { alert('الرجاء تعبئة جميع الحقول المطلوبة!'); return; }
+            if (pass.length < 6) { alert('كلمة المرور يجب ألا تقل عن 6 أحرف.'); return; }
+            registering = true;
+            try {
+                const c = await auth.createUserWithEmailAndPassword(email, pass);
+                currentUser = { uid: c.user.uid, ...newProfile(fullName, batch, email) };
+                isAdmin = false;
+                await saveUser();
+                alert(`تم إنشاء الحساب بنجاح! أهلاً بك يا ${fullName}.`);
+                closeAuthModal();
+                checkUserSession();
+            } catch (e) { fbErr(e); }
+            finally { registering = false; }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            if (!email || !pass) { alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور!'); return; }
+            try { await auth.signInWithEmailAndPassword(email, pass); closeAuthModal(); }
+            catch (e) { fbErr(e); }
+        }
+
+        function logoutUser() { auth.signOut().then(() => { alert('تم تسجيل الخروج بنجاح.'); location.reload(); }); }
+
+        async function submitForgotPasswordRequest() {
+            const email = document.getElementById('forgotEmailInput').value.trim();
+            if (!email) { alert('الرجاء إدخال البريد الإلكتروني!'); return; }
+            try { await auth.sendPasswordResetEmail(email); alert('أرسلنا رابط تعيين كلمة مرور جديدة إلى بريدك. تفقّد صندوق الوارد (والرسائل غير المرغوبة).'); closeAuthModal(); }
+            catch (e) { fbErr(e); }
+        }
+
+        // ---------- التقارير ----------
+        async function submitInitialFiveDays() {
+            if (!currentUser) return;
+            const initialReports = [], chartHistory = [];
+            for (let i = 1; i <= 5; i++) {
+                const habitsStatus = document.getElementById(`init_habits_${i}`).value;
+                const taskStatus = document.getElementById(`init_task_${i}`).value;
+                initialReports.push({ day: i, habitsStatus, taskStatus });
+                chartHistory.push(habitsStatus === 'majority' ? 85 : habitsStatus === 'some' ? 50 : 30);
+            }
+            Object.assign(currentUser, { initialFiveDaysDone: true, initialReports, chartHistory, score: (currentUser.score || 0) + 25 });
+            try {
+                await saveUser();
+                alert('تم حفظ تقارير الأيام الخمسة الأولى بنجاح وانعكست في المنحنى البياني! مرحباً بك في اليوم السادس.');
+                checkUserSession();
+            } catch (e) { fbErr(e); }
+        }
+
+        async function submitDailyReport() {
+            if (!currentUser) { alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك!'); openAuthModal(); return; }
+            const user = currentUser;
+            const checkedHabits = [...document.querySelectorAll('.habit-sub:checked')].map(cb => cb.value);
             user.habits = checkedHabits;
             user.taskDone = document.getElementById('dailyTaskDoneCheck').checked;
             user.dailyNote = document.getElementById('dailyUserNote').value.trim();
             user.communityThought = document.getElementById('communityThoughtInput').value.trim();
-            
             user.reportsCount = (user.reportsCount || 0) + 1;
             user.streak = (user.streak || 0) + 1;
-
-            let calculatedScore = checkedHabits.length;
-            if(user.taskDone) calculatedScore += 3;
+            const calculatedScore = checkedHabits.length + (user.taskDone ? 3 : 0);
             user.score = (user.score || 0) + calculatedScore;
-
-            let dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 17) * 100);
-            if(!user.chartHistory) user.chartHistory = [];
-            user.chartHistory.push(dayPercent);
-
-            localStorage.setItem('bunianActiveUser', JSON.stringify(user));
-            updateUserInDatabase(user);
-
-            if(user.dailyNote) {
-                let allNotes = JSON.parse(localStorage.getItem('bunianPrivateNotes') || '[]');
-                allNotes.push({ name: user.fullName, batch: user.batch, note: user.dailyNote, date: new Date().toLocaleString() });
-                localStorage.setItem('bunianPrivateNotes', JSON.stringify(allNotes));
-            }
-
-            // إرسال الخاطرة إلى قائمة قيد المراجعة للمشرف
-            if(user.communityThought) {
-                let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
-                pendingThoughts.push({ id: Date.now(), name: user.fullName, batch: user.batch, note: user.communityThought, date: new Date().toLocaleString() });
-                localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
-            }
-
-            alert(`تم إرسال تقرير اليوم بنجاح وانعكست في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
-            checkUserSession();
-            loadLeaderboard();
+            const dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 9) * 100);
+            user.chartHistory = [...(user.chartHistory || []), dayPercent];
+            try {
+                await saveUser();
+                const date = new Date().toLocaleString();
+                if (user.dailyNote) await db.collection('privateNotes').add({ uid: user.uid, name: user.fullName, batch: user.batch, note: user.dailyNote, date });
+                if (user.communityThought) await db.collection('thoughts').add({ uid: user.uid, name: user.fullName, note: user.communityThought, approved: false, at: Date.now() });
+                document.getElementById('dailyUserNote').value = '';
+                document.getElementById('communityThoughtInput').value = '';
+                alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
+                checkUserSession();
+            } catch (e) { fbErr(e); }
         }
 
-        function adminOpenNextDay() {
-            let currentDay = getGlobalActiveDay();
-            if(currentDay < 90) {
-                currentDay += 1;
-                localStorage.setItem('bunian_global_active_day', currentDay);
-                renderDaysGrid();
-                document.getElementById('adminCurrentDayDisplay').textContent = currentDay;
-                alert(`تم فتح اليوم ${currentDay} بنجاح للمشاركين!`);
-            } else {
-                alert('لقد وصلتم إلى اليوم الأخير من الرحلة (90)!');
-            }
+        // ---------- العرض العام ----------
+        function renderLeaderboard(list) {
+            if (!list.length) return;
+            const box = document.getElementById('leaderboardList');
+            box.innerHTML = list.map((u, i) => `<div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-xl border border-slate-800/60 text-xs"><span class="font-bold text-white">${i + 1}. ${esc(u.fullName)} (${esc(u.batch)})</span><span class="text-emerald-400 font-bold">${u.score || 0} نقطة</span></div>`).join('');
+        }
+        function renderWall(list) {
+            if (!list.length) return;
+            list.sort((a, b) => (b.at || 0) - (a.at || 0));
+            document.getElementById('communityNotesWall').innerHTML = list.map(t => `<div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic">"${esc(t.note)}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${esc(t.name)}</span></div>`).join('');
         }
 
-        function exportReportsToExcel() {
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            if(usersList.length === 0) {
-                alert('لا توجد بيانات لتصديرها.');
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "الاسم الكامل,رقم الدفعة,البريد الإلكتروني,النقاط الكلية,عدد التقارير\r\n";
-
-            usersList.forEach(u => {
-                csvContent += `"${u.fullName}","${u.batch}","${u.email}",${u.score || 0},${u.reportsCount || 0}\r\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "bunian_reports_90days.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        // ---------- المشرف ----------
+        function checkAdminAccess() {
+            if (!currentUser) { alert('سجّل الدخول بحساب المشرف أولاً.'); openAuthModal(); return; }
+            if (!isAdmin) { alert('هذا الحساب ليس حساب مشرف.'); return; }
+            loadAdminDashboardData();
+            document.getElementById('adminModal').classList.remove('hidden');
         }
 
-        function updateAdminPassword() {
-            const newPass = document.getElementById('newAdminPassInput').value.trim();
-            if(!newPass) {
-                alert('الرجاء إدخال كلمة المرور الجديدة!');
-                return;
-            }
-            localStorage.setItem('bunian_custom_admin_pass', newPass);
-            alert('تم تحديث كلمة مرور المشرف بنجاح!');
-            document.getElementById('newAdminPassInput').value = '';
+        async function adminOpenNextDay() {
+            if (!isAdmin) return;
+            const d = getGlobalActiveDay();
+            if (d >= 90) { alert('لقد وصلتم إلى اليوم الأخير من الرحلة (90)!'); return; }
+            try { await db.collection('config').doc('app').set({ activeDay: d + 1 }, { merge: true }); alert(`تم فتح اليوم ${d + 1} بنجاح للمشاركين!`); }
+            catch (e) { fbErr(e); }
         }
 
-        function resetSystemData() {
-            if(confirm('هل أنت متأكد من رغبتك في مسح كل التجارب والبيانات والـ Cache نهائياً؟')) {
-                localStorage.clear();
-                alert('تمت عملية إعادة تعيين النظام بنجاح.');
+        async function updateAdminPassword() {
+            const p = document.getElementById('newAdminPassInput').value.trim();
+            if (!p) { alert('الرجاء إدخال كلمة المرور الجديدة!'); return; }
+            try { await auth.currentUser.updatePassword(p); alert('تم تحديث كلمة مرور المشرف بنجاح!'); document.getElementById('newAdminPassInput').value = ''; }
+            catch (e) { fbErr(e); }
+        }
+
+        async function exportReportsToExcel() {
+            const snap = await db.collection('users').get();
+            if (snap.empty) { alert('لا توجد بيانات لتصديرها.'); return; }
+            let csv = "\uFEFFالاسم الكامل,رقم الدفعة,البريد الإلكتروني,النقاط الكلية,عدد التقارير\r\n";
+            snap.forEach(d => { const u = d.data(); csv += `"${u.fullName}","${u.batch}","${u.email}",${u.score || 0},${u.reportsCount || 0}\r\n`; });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+            a.download = 'bunian_reports_90days.csv';
+            document.body.appendChild(a); a.click(); a.remove();
+        }
+
+        async function resetSystemData() {
+            if (!isAdmin || !confirm('سيتم تصفير نقاط وتقارير كل المشاركين وإرجاع اليوم النشط إلى 6 (الحسابات تبقى). متأكد؟')) return;
+            try {
+                const snap = await db.collection('users').get();
+                const batch = db.batch();
+                snap.forEach(d => {
+                    batch.update(d.ref, { initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] });
+                    batch.set(db.collection('leaderboard').doc(d.id), { score: 0 }, { merge: true });
+                });
+                batch.set(db.collection('config').doc('app'), { activeDay: 6 }, { merge: true });
+                await batch.commit();
+                const [pn, th] = await Promise.all([db.collection('privateNotes').get(), db.collection('thoughts').get()]);
+                const b2 = db.batch();
+                pn.forEach(d => b2.delete(d.ref)); th.forEach(d => b2.delete(d.ref));
+                await b2.commit();
+                alert('تمت إعادة تعيين النظام بنجاح.');
                 location.reload();
-            }
+            } catch (e) { fbErr(e); }
         }
 
-        function loadLeaderboard() {
-            const leaderboard = document.getElementById('leaderboardList');
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            if(usersList.length === 0) return;
-
-            usersList.sort((a, b) => (b.score || 0) - (a.score || 0));
-            leaderboard.innerHTML = '';
-            usersList.slice(0, 5).forEach((u, index) => {
-                const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-slate-900/60 p-2 rounded-xl border border-slate-800/60 text-xs";
-                div.innerHTML = `<span class="font-bold text-white">${index + 1}. ${u.fullName} (${u.batch})</span><span class="text-emerald-400 font-bold">${u.score || 0} نقطة</span>`;
-                leaderboard.appendChild(div);
-            });
-        }
-
-        function loadCommunityNotes() {
-            const wall = document.getElementById('communityNotesWall');
-            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
-            if(approvedNotes.length === 0) {
-                wall.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-4">لا توجد خواطر منشورة حتى الآن. كن أول من يشارك خاطرة ملهمة!</p>`;
-                return;
-            }
-
-            wall.innerHTML = '';
-            approvedNotes.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic";
-                div.innerHTML = `"${item.note}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${item.name} (${item.batch})</span>`;
-                wall.appendChild(div);
-            });
-        }
-
-        function checkAdminAccess() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
-        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); document.getElementById('adminPassword').value = ''; }
-
-        function verifyAdminPassword() {
-            const enteredPass = document.getElementById('adminPassword').value;
-            const currentAdminPass = localStorage.getItem('bunian_custom_admin_pass') || 'admin2026';
-            if (enteredPass === currentAdminPass) {
-                closeAdminLoginModal();
-                loadAdminDashboardData();
-                document.getElementById('adminModal').classList.remove('hidden');
-            } else {
-                alert('رمز الدخول غير صحيح!');
-            }
-        }
-
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        function loadAdminDashboardData() {
+        async function loadAdminDashboardData() {
             const tbody = document.getElementById('adminReportsTableBody');
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            if(usersList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">لا يوجد مشاركون مسجلون بعد.</td></tr>`;
-            } else {
-                tbody.innerHTML = '';
-                usersList.forEach(u => {
-                    const userHabits = u.habits || [];
-                    let doneHtml = "";
-                    let notDoneHtml = "";
-
-                    allPossibleHabits.forEach(habit => {
-                        if (userHabits.includes(habit)) {
-                            doneHtml += `<span class="block text-[11px] text-emerald-400">✓ ${habit}</span>`;
-                        } else {
-                            notDoneHtml += `<span class="block text-[11px] text-red-400/80">✕ ${habit}</span>`;
-                        }
-                    });
-
-                    if(doneHtml === "") doneHtml = '<span class="text-slate-500 italic">لم يسجل أي عادة بعد</span>';
-                    if(notDoneHtml === "") notDoneHtml = '<span class="text-emerald-400 italic">أنجز كل العادات!</span>';
-
-                    const tr = document.createElement('tr');
-                    tr.className = "border-b border-slate-800/50 align-top";
-                    tr.innerHTML = `
-                        <td class="py-3 font-bold text-white">${u.fullName} <span class="block text-[10px] text-emerald-400 font-normal">${u.batch}</span></td>
-                        <td class="py-3 bg-emerald-950/20 p-2 rounded-xl">${doneHtml}</td>
-                        <td class="py-3 bg-red-950/10 p-2 rounded-xl">${notDoneHtml}</td>
-                        <td class="py-3 font-bold text-amber-400">${u.taskDone ? '✓ أنجزها' : '✕ لم ينجزها'}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            const reqsContainer = document.getElementById('adminPasswordRequestsList');
-            let passReqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
-            if(passReqs.length === 0) {
-                reqsContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد طلبات استعادة كلمة مرور حالياً.</p>`;
-            } else {
-                reqsContainer.innerHTML = '';
-                passReqs.forEach((req, idx) => {
-                    const div = document.createElement('div');
-                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs gap-2";
-                    div.innerHTML = `
-                        <span>البريد: <b class="text-amber-400">${req.email}</b> (${req.date})</span>
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <input type="text" id="newPassFor_${idx}" placeholder="كلمة المرور الجديدة" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-white text-[11px]">
-                            <button onclick="resolvePassRequest('${req.email}', ${idx})" class="bg-emerald-500 text-slate-950 px-3 py-1 rounded-lg font-bold">إرسال وتوثيق ✓</button>
-                        </div>`;
-                    reqsContainer.appendChild(div);
-                });
-            }
-
-            const notesContainer = document.getElementById('adminPrivateNotesList');
-            let privNotes = JSON.parse(localStorage.getItem('bunianPrivateNotes') || '[]');
-            if(privNotes.length === 0) {
-                notesContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>`;
-            } else {
-                notesContainer.innerHTML = '';
-                privNotes.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300";
-                    div.innerHTML = `<b class="text-emerald-400">${item.name} (${item.batch}):</b> "${item.note}" <span class="block text-[9px] text-slate-500 mt-1">${item.date}</span>`;
-                    notesContainer.appendChild(div);
-                });
-            }
-
-            // عرض الخواطر المعلقة للمراجعة في لوحة المشرف
-            const pendingThoughtsContainer = document.getElementById('pendingThoughtsList');
-            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
-            if(pendingThoughts.length === 0) {
-                pendingThoughtsContainer.innerHTML = `<p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>`;
-            } else {
-                pendingThoughtsContainer.innerHTML = '';
-                pendingThoughts.forEach((item, index) => {
-                    const div = document.createElement('div');
-                    div.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs gap-3";
-                    div.innerHTML = `
-                        <div class="flex-1">
-                            <b class="text-amber-400">${item.name} (${item.batch}):</b> "${item.note}"
-                            <span class="block text-[9px] text-slate-500 mt-1">${item.date}</span>
-                        </div>
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <button onclick="approveThought(${index})" class="bg-emerald-500 text-slate-950 px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-400 transition">موافقة ونشر ✓</button>
-                            <button onclick="rejectThought(${index})" class="bg-red-500/20 text-red-400 border border-red-500/40 px-3 py-1.5 rounded-lg font-bold hover:bg-red-500 hover:text-white transition">رفض ✕</button>
-                        </div>`;
-                    pendingThoughtsContainer.appendChild(div);
-                });
-            }
+            const notesBox = document.getElementById('adminPrivateNotesList');
+            const thoughtsBox = document.getElementById('pendingThoughtsList');
+            try {
+                const [us, ns, ts] = await Promise.all([
+                    db.collection('users').get(),
+                    db.collection('privateNotes').get(),
+                    db.collection('thoughts').where('approved', '==', false).get()
+                ]);
+                tbody.innerHTML = us.empty ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">لا يوجد مشاركون مسجلون بعد.</td></tr>` :
+                    us.docs.map(d => { const u = d.data(); return `<tr class="border-b border-slate-800/50 align-top"><td class="py-3 font-bold text-white">${esc(u.fullName)} <span class="block text-[10px] text-emerald-400 font-normal">${esc(u.batch)}</span></td><td class="py-3">${u.initialFiveDaysDone ? '✅ مكتمل' : '⏳ غير مكتمل'}</td><td class="py-3">${u.habits ? u.habits.length + ' عادات' : '0'}</td><td class="py-3">${u.taskDone ? '✓ أنجزها' : '✕'}</td></tr>`; }).join('');
+                notesBox.innerHTML = ns.empty ? `<p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>` :
+                    ns.docs.map(d => { const n = d.data(); return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300"><b class="text-emerald-400">${esc(n.name)} (${esc(n.batch)}):</b> "${esc(n.note)}" <span class="block text-[9px] text-slate-500 mt-1">${esc(n.date)}</span></div>`; }).join('');
+                thoughtsBox.innerHTML = ts.empty ? `<p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>` :
+                    ts.docs.map(d => { const t = d.data(); return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs flex flex-col sm:flex-row justify-between gap-2"><span class="text-slate-300">"${esc(t.note)}" <b class="text-emerald-400">— ${esc(t.name)}</b></span><span class="flex gap-2 shrink-0"><button onclick="moderateThought('${d.id}', true)" class="bg-emerald-500 text-slate-950 px-3 py-1 rounded-lg font-bold">نشر ✓</button><button onclick="moderateThought('${d.id}', false)" class="bg-red-500/20 text-red-400 px-3 py-1 rounded-lg font-bold">حذف</button></span></div>`; }).join('');
+            } catch (e) { fbErr(e); }
         }
 
-        function approveThought(index) {
-            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
-            let approvedNotes = JSON.parse(localStorage.getItem('bunianApprovedNotes') || '[]');
-
-            const thoughtToApprove = pendingThoughts[index];
-            approvedNotes.push(thoughtToApprove);
-            pendingThoughts.splice(index, 1);
-
-            localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
-            localStorage.setItem('bunianApprovedNotes', JSON.stringify(approvedNotes));
-
-            alert('تمت الموافقة على الخاطرة ونشرها بنجاح في حائط الإلهام!');
-            loadAdminDashboardData();
-            loadCommunityNotes();
-        }
-
-        function rejectThought(index) {
-            let pendingThoughts = JSON.parse(localStorage.getItem('bunianPendingThoughts') || '[]');
-            pendingThoughts.splice(index, 1);
-            localStorage.setItem('bunianPendingThoughts', JSON.stringify(pendingThoughts));
-
-            alert('تم رفض وحذف الخاطرة.');
-            loadAdminDashboardData();
-        }
-
-        function resolvePassRequest(targetEmail, index) {
-            const passInput = document.getElementById(`newPassFor_${index}`).value.trim();
-            if(!passInput) {
-                alert('الرجاء كتابة كلمة المرور الجديدة أولاً!');
-                return;
-            }
-
-            let usersList = JSON.parse(localStorage.getItem('bunianUsersList') || '[]');
-            usersList = usersList.map(u => {
-                if(u.email === targetEmail) {
-                    u.pass = passInput;
-                }
-                return u;
-            });
-            localStorage.setItem('bunianUsersList', JSON.stringify(usersList));
-
-            let resolvedList = JSON.parse(localStorage.getItem('bunianResolvedPasswords') || '{}');
-            resolvedList[targetEmail] = passInput;
-            localStorage.setItem('bunianResolvedPasswords', JSON.stringify(resolvedList));
-
-            let passReqs = JSON.parse(localStorage.getItem('bunianPassRequests') || '[]');
-            passReqs.splice(index, 1);
-            localStorage.setItem('bunianPassRequests', JSON.stringify(passReqs));
-
-            alert(`تم تعيين وإرسال كلمة المرور للمشارك (${targetEmail}) بنجاح!`);
-            loadAdminDashboardData();
+        async function moderateThought(id, approve) {
+            try {
+                const ref = db.collection('thoughts').doc(id);
+                if (approve) await ref.update({ approved: true }); else await ref.delete();
+                loadAdminDashboardData();
+            } catch (e) { fbErr(e); }
         }
 
         function initOrUpdateChart(historyData) {
