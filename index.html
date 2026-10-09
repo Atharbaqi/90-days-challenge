@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -26,46 +15,62 @@
             theme: {
                 extend: {
                     colors: {
-                        bunianGreen: '#10B981',
-                        bunianDark: '#0F172A',
-                        bunianCard: '#1E293B',
-                        bunianLightGreen: '#D1FAE5'
+                        // ألوان الهوية البصرية
+                        bunianLime: '#EBFE71',
+                        bunianBeige: '#DDDAC7',
+                        bunianMist: '#ABBDC1',
+                        bunianDark: '#2B464F',
+                        bunianGray: '#EEEEEE',
+                        bunianGreen: '#38F167',
+                        bunianLightGreen: '#E0FCC1',
+                        // إعادة ربط لوحات Tailwind المستخدمة في الصفحة بألوان الهوية
+                        slate: { 50:'#EEEEEE',100:'#EEEEEE',200:'#DDDAC7',300:'#ABBDC1',400:'#93AAB0',500:'#6F8890',600:'#4F6A73',700:'#3D5963',800:'#324D57',900:'#223B44',950:'#162A31' },
+                        emerald: { 200:'#E0FCC1',300:'#E0FCC1',400:'#5DF585',500:'#38F167',600:'#2BD458',900:'#1F5A3A',950:'#143A28' },
+                        amber: { 300:'#F4FFA3',400:'#EBFE71',500:'#DCEF55',950:'#46531E' }
                     },
                     fontFamily: {
-                        cairo: ['Cairo', 'sans-serif']
+                        lama: ['Lama Sans', 'Cairo', 'sans-serif']
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #F8FAFC; scroll-behavior: smooth; }
-        .garden-plot { aspect-ratio: 1 / 1; border-radius: 0.85rem; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #3b2f22; background: linear-gradient(180deg,#2a2018,#1a130d); }
-        .garden-plot.planted { background: linear-gradient(180deg,#14532d33,#2a2018 70%); border-color:#10B98155; }
+        @font-face { font-family: 'Lama Sans'; font-weight: 400; font-style: normal; font-display: swap;
+            src: local('Lama Sans Regular'), local('LamaSans-Regular'), url('fonts/LamaSans-Regular.woff2') format('woff2'), url('fonts/LamaSans-Regular.otf') format('opentype'); }
+        @font-face { font-family: 'Lama Sans'; font-weight: 600; font-style: normal; font-display: swap;
+            src: local('Lama Sans SemiBold'), local('LamaSans-SemiBold'), url('fonts/LamaSans-SemiBold.woff2') format('woff2'), url('fonts/LamaSans-SemiBold.otf') format('opentype'); }
+        @font-face { font-family: 'Lama Sans'; font-weight: 700; font-style: normal; font-display: swap;
+            src: local('Lama Sans Bold'), local('LamaSans-Bold'), url('fonts/LamaSans-Bold.woff2') format('woff2'), url('fonts/LamaSans-Bold.otf') format('opentype'); }
+        @font-face { font-family: 'Lama Sans'; font-weight: 900; font-style: normal; font-display: swap;
+            src: local('Lama Sans Black'), local('LamaSans-Black'), url('fonts/LamaSans-Black.woff2') format('woff2'), url('fonts/LamaSans-Black.otf') format('opentype'); }
+        body { font-family: 'Lama Sans', 'Cairo', sans-serif; background-color: #14262D; color: #EEEEEE; scroll-behavior: smooth; }
+        .garden-plot { aspect-ratio: 1 / 1; border-radius: 0.85rem; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #3D5963; background: linear-gradient(180deg,#1B323A,#14262D); }
+        .garden-plot.planted { background: linear-gradient(180deg,#38F16722,#1B323A 70%); border-color:#38F16755; }
         .garden-plot .plant { font-size: 1.6rem; line-height:1; animation: sprout .8s ease-out both; transform-origin: bottom center; }
         .garden-plot .seed { font-size: .9rem; opacity:.35; }
-        .garden-plot small { font-size: 8px; color:#94A3B8; margin-top:2px; }
+        .garden-plot small { font-size: 8px; color:#ABBDC1; margin-top:2px; }
         @keyframes sprout { from { transform: scale(0) translateY(10px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
-        .day-card.active { border-color: #10B981; background: rgba(16, 185, 129, 0.1); }
-        .day-card.completed { background: #1E293B; opacity: 0.7; }
-        .day-card.locked { background: #0F172A; border-style: dashed; opacity: 0.4; cursor: not-allowed; }
+        .day-card.active { border-color: #38F167; background: rgba(56, 241, 103, 0.1); }
+        .day-card.completed { background: #2B464F; opacity: 0.7; }
+        .day-card.locked { background: #1B323A; border-style: dashed; opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
     <!-- شريط التنقل العلوي التفاعلي -->
-    <header class="bg-[#0F172A] border-b border-slate-800 py-3 sm:py-4 px-4 sm:px-6 flex flex-wrap gap-y-2 justify-between items-center sticky top-0 z-50">
+    <header class="bg-[#1B323A] border-b border-slate-800 py-3 sm:py-4 px-4 sm:px-6 flex flex-wrap gap-y-2 justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-2 flex-wrap">
             <span class="text-emerald-400 font-black text-xl">بنيان</span>
             <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-bold inline-block">همة تحيي الأمة</span>
             <!-- زر المدير للهاتف (يختفي في الشاشات الكبيرة لأنه موجود في القائمة) -->
-            <button onclick="checkAdminAccess()" class="md:hidden text-[11px] bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30 font-bold">المدير 🔐</button>
+            <button onclick="checkAdminAccess()" class="md:hidden text-[11px] bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30 font-bold">المدير </button>
         </div>
         <nav class="hidden md:flex space-x-6 space-x-reverse text-sm text-slate-300">
             <a href="#" class="text-emerald-400 font-bold">الرئيسية</a>
             <a href="#habitsSection" class="hover:text-emerald-400 transition">رحلتي</a>
             <a href="#statsSection" class="hover:text-emerald-400 transition">إحصائيات</a>
-            <a href="javascript:void(0);" onclick="checkAdminAccess()" class="hover:text-emerald-400 text-amber-400 font-bold transition">المدير 🔐</a>
+            <a href="javascript:void(0);" onclick="checkAdminAccess()" class="hover:text-emerald-400 text-amber-400 font-bold transition">المدير </a>
         </nav>
         <div class="flex items-center space-x-3 space-x-reverse">
             <!-- يظهر قبل تسجيل الدخول -->
@@ -85,7 +90,7 @@
     </header>
 
     <!-- الأبيات الشعرية تحت الهيدر مباشرة كما طلبت -->
-    <section class="bg-gradient-to-r from-slate-900 via-[#131c31] to-slate-900 border-b border-slate-800 py-6 px-4 text-center">
+    <section class="bg-gradient-to-r from-slate-900 via-[#223B44] to-slate-900 border-b border-slate-800 py-6 px-4 text-center">
         <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-emerald-300/90">
             <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نحمل قلما .. نزرع فكرة</div>
             <div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-800">نغرس حلما .. نترك أثرا</div>
@@ -102,8 +107,8 @@
             <div id="welcomeModal" class="bg-gradient-to-r from-emerald-900/80 to-slate-900 text-slate-100 p-6 rounded-2xl shadow-lg border border-emerald-500/30 flex flex-col md:flex-row justify-between items-center relative">
                 <div class="flex items-center space-x-4 space-x-reverse mb-4 md:mb-0">
                     <div class="bg-emerald-500 text-slate-950 p-3 rounded-xl font-bold text-lg flex flex-col items-center">
-                        <span>📅</span>
-                        <span class="text-xs">اليوم</span>
+                        <span>90</span>
+                        <span class="text-xs">يوماً</span>
                     </div>
                     <div>
                         <h3 class="font-bold text-lg text-emerald-400">أهلاً بك في رحلة التسعين يوماً!</h3>
@@ -117,9 +122,9 @@
         </div>
 
         <!-- قسم مربعات الأيام -->
-        <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
+        <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg text-emerald-400">🗺️ شبكة رحلة الـ 90 يوماً</h3>
+                <h3 class="font-bold text-lg text-emerald-400"> شبكة رحلة الـ 90 يوماً</h3>
                 <span id="currentActiveDayLabel" class="text-xs bg-slate-900 px-3 py-1 rounded-xl text-emerald-400 border border-slate-800 font-bold">اليوم النشط: 6</span>
             </div>
             <p class="text-xs text-slate-400 mb-6">الأيام السابقة مقفولة ومجراة، اليوم الحالي مفتوح للإرسال، والأيام القادمة مقفولة بانتظار فتح الأدمن.</p>
@@ -130,9 +135,9 @@
         </div>
 
         <!-- قسم تعبئة الأيام الخمسة الأولى (بصياغة الفصحى وبضمير أنا) -->
-        <div id="initialFiveDaysSection" class="hidden bg-[#1E293B] p-8 rounded-3xl border border-amber-500/40 space-y-6">
+        <div id="initialFiveDaysSection" class="hidden bg-[#2B464F] p-8 rounded-3xl border border-amber-500/40 space-y-6">
             <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30">
-                <h3 class="font-bold text-base text-amber-400">📌 مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
+                <h3 class="font-bold text-base text-amber-400"> مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
                 <p class="text-xs text-slate-300 mt-1">حدد مدى التزامك بالعادات لكل يوم من الأيام الخمسة الماضية بضمير المتكلم قبل الانتقال إلى اليوم السادس.</p>
             </div>
             
@@ -145,22 +150,22 @@
 
         <!-- قسم العادات اليومية التفصيلية -->
         <div id="habitsSection" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-[#1E293B] p-6 rounded-3xl border border-slate-800 flex flex-col justify-between space-y-6">
+            <div class="lg:col-span-2 bg-[#2B464F] p-6 rounded-3xl border border-slate-800 flex flex-col justify-between space-y-6">
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-emerald-400">📋 تقرير اليوم الحالي (العادات اليومية)</h3>
+                    <h3 class="font-bold text-lg mb-4 text-emerald-400"> تقرير اليوم الحالي (العادات اليومية)</h3>
                     
                     <div id="habitsContainer" class="space-y-4"></div>
 
                     <!-- ملاحظات خاصة للإدارة -->
                     <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 mt-6">
-                        <label class="block text-xs font-bold text-emerald-400 mb-2">🔒 ملاحظات خاصة (ترسل للإدارة والمشرف فقط):</label>
+                        <label class="block text-xs font-bold text-emerald-400 mb-2"> ملاحظات خاصة (ترسل للإدارة والمشرف فقط):</label>
                         <textarea id="dailyUserNote" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500" placeholder="اكتب ملاحظاتك السرية أو التحديات الخاصة لتصل للمشرف حصرياً..."></textarea>
                     </div>
 
                     <!-- خاطرة الحائط -->
                     <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 mt-4">
-                        <label class="block text-xs font-bold text-amber-400 mb-2">✨ خاطرة لـ "حائط إلهام البنيانيست" (ترسل للمراجعة والنشر):</label>
-                        <textarea id="communityThoughtInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500" placeholder="اكتب خاطرة أو فائدة تلهم بها غيرك (ستنشر بعد موافقة المشرف)..."></textarea>
+                        <label class="block text-xs font-bold text-amber-400 mb-2"> خاطرة لـ "حائط إلهام البنيانيست" (ترسل للمراجعة والنشر):</label>
+                        <textarea id="communityThoughtInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500" placeholder="اكتب خاطرة أو فائدة لتلهم بها غيرك (ستنشر بعد موافقة المشرف)..."></textarea>
                     </div>
                 </div>
                 <button onclick="submitDailyReport()" class="w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-emerald-400 transition shadow-lg">حفظ وإرسال التقرير اليومي للمشرف</button>
@@ -169,12 +174,12 @@
             <!-- الجانب الأيمن -->
             <div class="space-y-6">
                 <!-- اقتباسات متجددة (من الـ PDF بدون عنوان) -->
-                <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
+                <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
                     <p id="quoteBoxText" class="text-sm italic text-slate-300">"والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك."</p>
                 </div>
 
                 <!-- مهمة اليوم -->
-                <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
+                <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
                     <h4 class="text-sm font-bold text-emerald-400 mb-2">مهمة اليوم</h4>
                     <p id="displayDailyTask" class="text-xs text-slate-300 mb-4">أغلق الهاتف ساعة قبل النوم واقضِ وقتاً في ذكر الله.</p>
                     <label class="flex items-center space-x-2 space-x-reverse bg-slate-900/80 p-3 rounded-xl border border-slate-800 cursor-pointer">
@@ -184,16 +189,16 @@
                 </div>
 
                 <!-- لوحة أصحاب الهمم -->
-                <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
-                    <h4 class="text-sm font-bold text-emerald-400 mb-3">⭐ لوحة أصحاب الهمم (المتصدرون)</h4>
+                <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
+                    <h4 class="text-sm font-bold text-emerald-400 mb-3"> لوحة أصحاب الهمم (المتصدرون)</h4>
                     <div id="leaderboardList" class="space-y-2 text-xs">
                         <p class="text-xs text-slate-400 italic text-center py-2">لا توجد تصدرات حالياً. ابدأ بإنجاز عاداتك لتعتلي القمة!</p>
                     </div>
                 </div>
 
                 <!-- حائط إلهام البنيانيست -->
-                <div class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
-                    <h4 class="text-sm font-bold text-emerald-400 mb-3">💬 حائط إلهام البنيانيست</h4>
+                <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
+                    <h4 class="text-sm font-bold text-emerald-400 mb-3"> حائط إلهام البنيانيست</h4>
                     <div id="communityNotesWall" class="space-y-2 text-xs max-h-48 overflow-y-auto pr-1">
                         <p class="text-xs text-slate-400 italic text-center py-4">لا توجد خواطر منشورة حتى الآن. كن أول من يشارك خاطرة ملهمة!</p>
                     </div>
@@ -202,7 +207,7 @@
                 <!-- تذكير بآخر أجل لإرسال التحدي (بديل المؤقت) -->
                 <div id="reportsSection" class="bg-gradient-to-br from-amber-500/20 to-slate-900 border border-amber-500/30 p-6 rounded-3xl text-slate-100 text-center space-y-2">
                     <div class="flex items-center justify-center space-x-2 space-x-reverse mb-1">
-                        <span class="text-lg">⏳</span>
+                        <span class="text-lg"> </span>
                         <h4 class="font-bold text-sm text-amber-400">تذكير هام</h4>
                     </div>
                     <p class="text-xs text-slate-300">آخر أجل لإرسال التحدي وإتمام تقرير اليوم هو:</p>
@@ -212,9 +217,9 @@
                 </div>
 
                 <!-- حديقة الرحلة: نبتة جديدة مع كل أسبوع -->
-                <div id="gardenSection" class="bg-gradient-to-b from-emerald-900/30 to-[#1E293B] border border-emerald-500/20 p-5 rounded-3xl">
+                <div id="gardenSection" class="bg-gradient-to-b from-emerald-900/30 to-[#2B464F] border border-emerald-500/20 p-5 rounded-3xl">
                     <div class="flex items-center justify-between mb-1">
-                        <h4 class="font-bold text-sm text-emerald-400">🌿 حديقة بنيان</h4>
+                        <h4 class="font-bold text-sm text-emerald-400"> حديقة بنيان</h4>
                         <span id="gardenCounter" class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20 font-bold">0 / 12</span>
                     </div>
                     <p id="gardenHint" class="text-[11px] text-slate-400 mb-3"></p>
@@ -225,7 +230,7 @@
         </div>
 
         <!-- قسم الإحصائيات -->
-        <div id="statsSection" class="bg-[#1E293B] p-6 rounded-3xl border border-slate-800">
+        <div id="statsSection" class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h3 class="font-bold text-lg">إحصائيات التقدم والمنحنى البياني</h3>
@@ -239,12 +244,18 @@
 
     </main>
 
-    <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور -->
+    <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور / تنبيه كلمة المرور الجديدة -->
     <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
+        <div class="bg-[#2B464F] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
             <div class="flex border-b border-slate-700 pb-3 mb-4">
                 <button onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition">تسجيل الدخول</button>
                 <button onclick="switchAuthTab('register')" id="registerTabBtn" class="flex-1 font-bold text-sm text-slate-400 pb-1 transition">حساب جديد</button>
+            </div>
+
+            <!-- تنبيه يظهر أوتوماتيكياً إذا تمت الموافقة على كلمة المرور الجديدة من طرف المشرف -->
+            <div id="newPasswordAlertBox" class="hidden bg-emerald-500/20 border border-emerald-500 p-3 rounded-xl mb-4 text-xs text-emerald-300">
+                <h4 class="font-bold mb-1"> تمت الموافقة على طلب استعادة كلمة المرور!</h4>
+                <p>كلمة المرور الجديدة الخاصة بك هي: <b id="resolvedNewPassText" class="text-white bg-slate-950 px-2 py-0.5 rounded"></b></p>
             </div>
 
             <!-- نموذج تسجيل الدخول -->
@@ -266,7 +277,7 @@
 
             <!-- نموذج نسيت كلمة المرور -->
             <div id="forgotPassSection" class="space-y-3 hidden">
-                <h3 class="text-xs font-bold text-amber-400 mb-2">🔑 استعادة كلمة المرور:</h3>
+                <h3 class="text-xs font-bold text-amber-400 mb-2"> استعادة كلمة المرور:</h3>
                 <p class="text-[11px] text-slate-300">أدخل بريدك الإلكتروني المسجل، وسنرسل لك رابطاً لتعيين كلمة مرور جديدة على بريدك:</p>
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">البريد الإلكتروني:</label>
@@ -302,11 +313,24 @@
         </div>
     </div>
 
+    <!-- نافذة إدخال كلمة المرور للمشرف -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+        <div class="bg-[#2B464F] border border-slate-700 p-6 rounded-3xl max-w-sm w-full mx-4 text-slate-100 text-center">
+            <h3 class="text-base font-bold text-emerald-400 mb-2"> بوابة المشرفين</h3>
+            <p class="text-xs text-slate-400 mb-4">الرجاء إدخال رمز الدخول الخاص بالمشرفين لعرض لوحة التحكم.</p>
+            <input type="password" id="adminPassword" placeholder="أدخل رمز المشرف هنا" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-center text-white mb-4 focus:outline-none focus:border-emerald-500">
+            <div class="flex space-x-2 space-x-reverse">
+                <button onclick="verifyAdminPassword()" class="flex-1 bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-600 transition">دخول</button>
+                <button onclick="closeAdminLoginModal()" class="bg-slate-800 text-slate-300 px-4 py-2 rounded-xl text-xs hover:bg-slate-700 transition">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة لوحة المدير الشاملة والمحدثة -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="bg-[#1E293B] border border-slate-700 p-6 rounded-3xl max-w-5xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
+        <div class="bg-[#2B464F] border border-slate-700 p-6 rounded-3xl max-w-5xl w-full mx-4 text-slate-100 relative max-h-[85vh] overflow-y-auto space-y-6">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-emerald-400">🔐 لوحة تحكم المشرف المتقدمة</h3>
+                <h3 class="text-lg font-bold text-emerald-400"> لوحة تحكم المشرف المتقدمة</h3>
                 <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕ إغلاق</button>
             </div>
 
@@ -325,42 +349,42 @@
                         <h4 class="text-xs font-bold text-amber-400">تصدير التقارير</h4>
                         <p class="text-[10px] text-slate-300 mt-0.5">تحميل كافة تقارير المشاركين كملف Excel (CSV)</p>
                     </div>
-                    <button onclick="exportReportsToExcel()" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs hover:bg-amber-400 transition shadow-lg">تصدير لـ Excel 📊</button>
+                    <button onclick="exportReportsToExcel()" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs hover:bg-amber-400 transition shadow-lg">تصدير لـ Excel </button>
                 </div>
             </div>
 
             <!-- محرر العادات اليومية -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3">
                 <div class="flex flex-wrap justify-between items-center gap-2">
-                    <h4 class="text-xs font-bold text-emerald-400">📝 تعديل العادات اليومية (تظهر فوراً عند كل المشاركين بعد الحفظ):</h4>
+                    <h4 class="text-xs font-bold text-emerald-400"> تعديل العادات اليومية (تظهر فوراً عند كل المشاركين بعد الحفظ):</h4>
                     <button onclick="resetHabitsDefault()" class="text-[11px] bg-slate-800 text-slate-300 px-3 py-1 rounded-lg hover:bg-slate-700">استرجاع القائمة الافتراضية</button>
                 </div>
                 <p class="text-[10px] text-slate-400">اكتب كل عادة بصيغة المتكلم (مثال: «قرأت أذكار الصباح»). الأيقونة اختيارية.</p>
                 <div id="habitsEditor" class="space-y-3"></div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="addCat()" class="bg-slate-800 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-slate-700">+ إضافة محور جديد</button>
-                    <button onclick="saveHabits()" class="bg-emerald-500 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs hover:bg-emerald-400">حفظ ونشر للجميع ✅</button>
+                    <button onclick="saveHabits()" class="bg-emerald-500 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs hover:bg-emerald-400">حفظ ونشر للجميع </button>
                 </div>
             </div>
 
             <!-- تعديل كلمة مرور المشرف وإعادة تعيين النظام -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
                 <div>
-                    <h4 class="text-xs font-bold text-emerald-400 mb-2">⚙️ تعديل كلمة المرور الخاصة بالمشرف:</h4>
+                    <h4 class="text-xs font-bold text-emerald-400 mb-2"> تعديل كلمة المرور الخاصة بالمشرف:</h4>
                     <div class="flex space-x-2 space-x-reverse">
                         <input type="password" id="newAdminPassInput" placeholder="كلمة المرور الجديدة" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white">
                         <button onclick="updateAdminPassword()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs hover:bg-emerald-400 transition">تحديث</button>
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold text-red-400 mb-2">⚠️ إعادة التعيين (مسح التجارب):</h4>
-                    <button onclick="resetSystemData()" class="w-full bg-red-500/20 text-red-400 border border-red-500/40 font-bold py-1.5 rounded-xl text-xs hover:bg-red-500 hover:text-white transition">مسح كل التجارب والبيانات التجريبية 🗑️</button>
+                    <h4 class="text-xs font-bold text-red-400 mb-2"> إعادة التعيين (مسح التجارب):</h4>
+                    <button onclick="resetSystemData()" class="w-full bg-red-500/20 text-red-400 border border-red-500/40 font-bold py-1.5 rounded-xl text-xs hover:bg-red-500 hover:text-white transition">مسح كل التجارب والبيانات التجريبية </button>
                 </div>
             </div>
 
             <!-- طلبات استعادة كلمة المرور وتعيين الجديدة -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">🔑 استعادة كلمة المرور:</h4>
+                <h4 class="text-xs font-bold text-amber-400 mb-3"> استعادة كلمة المرور:</h4>
                 <div id="adminPasswordRequestsList" class="space-y-3">
                     <p class="text-xs text-slate-400 italic">صارت الاستعادة تلقائية: يصل المشارك رابط التعيين على بريده مباشرة، ولا حاجة لتدخلك.</p>
                 </div>
@@ -368,7 +392,7 @@
 
             <!-- جدول تقارير المشاركين -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 overflow-x-auto">
-                <h4 class="text-xs font-bold text-emerald-400 mb-3">📋 تقرير وعادات المشاركين العامة:</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3"> تقرير وعادات المشاركين العامة:</h4>
                 <table class="w-full text-right text-xs">
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400">
@@ -386,7 +410,7 @@
 
             <!-- الملاحظات الخاصة الواردة للإدارة فقط -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-emerald-400 mb-3">🔒 الملاحظات الخاصة (ترسل للإدارة والمشرف فقط):</h4>
+                <h4 class="text-xs font-bold text-emerald-400 mb-3"> الملاحظات الخاصة (ترسل للإدارة والمشرف فقط):</h4>
                 <div id="adminPrivateNotesList" class="space-y-3 max-h-40 overflow-y-auto pr-1">
                     <p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>
                 </div>
@@ -394,7 +418,7 @@
 
             <!-- مراجعة الخواطر للحائط -->
             <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-amber-400 mb-3">✨ مراجعة خواطر حائط إلهام البنيانيست:</h4>
+                <h4 class="text-xs font-bold text-amber-400 mb-3"> مراجعة خواطر حائط إلهام البنيانيست:</h4>
                 <div id="pendingThoughtsList" class="space-y-3">
                     <p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>
                 </div>
@@ -437,7 +461,9 @@
             initFirebase();
         };
 
-        // ===== العادات اليومية =====
+
+
+        // ===== العادات اليومية (يعدّلها المشرف وتُخزَّن في Firestore: config/app.habits) =====
         function hoursPhrase(h) {
             if (h === 1) return 'ساعة واحدة';
             if (h === 2) return 'ساعتين';
@@ -448,14 +474,14 @@
             let h = parseInt(appConfig.phoneHours);
             if (!h || h < 1 || h > 12) h = 3;
             return [
-                { icon: '⏰', title: 'الاستيقاظ باكراً', items: ['استيقظت مع صلاة الفجر', 'لم أعد إلى الفراغ بعد الفجر'] },
-                { icon: '📖', title: 'الصلاة', items: ['أديت الصلوات الخمس في وقتها', 'حافظت على صلاة النوافل حسب استطاعتي', 'أديت الصلاة في المسجد'] },
-                { icon: '📿', title: 'الأذكار', items: ['قرأت أذكار الصباح', 'قرأت أذكار المساء', 'داومت على أذكار بعد الصلاة', 'قرأت أذكار النوم'] },
-                { icon: '📚', title: 'الورد القرآني', items: ['أتممت وردي القرآني (صفحة واحدة على الأقل)'] },
-                { icon: '📖', title: 'المطالعة', items: ['قرأت لمدة 20 دقيقة على الأقل'] },
-                { icon: '📱', title: 'الهاتف', items: [`ابتعدت عن الهاتف لـ ${hoursPhrase(h)} متواصلة`, 'تجنبت استخدامه أثناء إنجاز مهامي'] },
-                { icon: '🏃', title: 'الحركة', items: ['مارست المشي أو التمارين الرياضية لـ 30 دقيقة'] },
-                { icon: '🌙', title: 'النوم', items: ['نمت في الوقت المحدد', 'أوقفت الهاتف قبل النوم بـ 30 دقيقة'] }
+                { title: 'الاستيقاظ باكراً', items: ['استيقظت مع صلاة الفجر', 'لم أعد إلى الفراش بعد الفجر'] },
+                { title: 'الصلاة', items: ['أديت الصلوات الخمس في وقتها', 'حافظت على صلاة النوافل حسب استطاعتي', 'أديت الصلاة في المسجد'] },
+                { title: 'الأذكار', items: ['قرأت أذكار الصباح', 'قرأت أذكار المساء', 'داومت على أذكار بعد الصلاة', 'قرأت أذكار النوم'] },
+                { title: 'الورد القرآني', items: ['أتممت وردي القرآني (صفحة واحدة على الأقل)'] },
+                { title: 'المطالعة', items: ['قرأت لمدة 20 دقيقة على الأقل'] },
+                { title: 'الهاتف', items: [`ابتعدت عن الهاتف لـ ${hoursPhrase(h)} متواصلة`, 'تجنبت استخدامه أثناء إنجاز مهامي'] },
+                { title: 'الحركة', items: ['مارست المشي أو التمارين الرياضية لـ 30 دقيقة'] },
+                { title: 'النوم', items: ['نمت في الوقت المحدد', 'أوقفت الهاتف قبل النوم بـ 30 دقيقة'] }
             ];
         }
         function getHabits() {
@@ -465,7 +491,7 @@
             const box = document.getElementById('habitsContainer');
             if (!box) return;
             const checked = new Set([...box.querySelectorAll('.habit-sub:checked')].map(c => c.value));
-            box.innerHTML = getHabits().map((c, i) => `<div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800"><h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">${esc(c.icon || '•')}</span> ${i + 1}. ${esc(c.title)}</h4><div class="space-y-2 pr-4 text-xs">${(c.items || []).map(t => `<label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="${esc(t)}"${checked.has(t) ? ' checked' : ''}><span>${esc(t)}</span></label>`).join('')}</div></div>`).join('');
+            box.innerHTML = getHabits().map((c, i) => `<div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800"><h4 class="font-bold text-sm text-white mb-2 flex items-center">${i + 1}. ${esc(c.title)}</h4><div class="space-y-2 pr-4 text-xs">${(c.items || []).map(t => `<label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="${esc(t)}"${checked.has(t) ? ' checked' : ''}><span>${esc(t)}</span></label>`).join('')}</div></div>`).join('');
         }
 
         // ----- محرر المشرف -----
@@ -476,17 +502,16 @@
             if (!box) return;
             box.innerHTML = habitsDraft.map((c, ci) => `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
                 <div class="flex gap-2 items-center">
-                    <input value="${esc(c.icon)}" maxlength="4" placeholder="🙂" oninput="habitsDraft[${ci}].icon=this.value" class="${inCls} w-14 text-center">
                     <input value="${esc(c.title)}" placeholder="عنوان المحور" oninput="habitsDraft[${ci}].title=this.value" class="${inCls} flex-1 font-bold">
                     <button onclick="moveCat(${ci},-1)" class="text-slate-400 hover:text-white px-1">↑</button>
                     <button onclick="moveCat(${ci},1)" class="text-slate-400 hover:text-white px-1">↓</button>
-                    <button onclick="removeCat(${ci})" class="text-red-400 hover:text-red-300 px-1">🗑️</button>
+                    <button onclick="removeCat(${ci})" class="text-red-400 hover:text-red-300 px-1"> </button>
                 </div>
                 ${c.items.map((t, ti) => `<div class="flex gap-2 items-center pr-4"><input value="${esc(t)}" placeholder="نص العادة" oninput="habitsDraft[${ci}].items[${ti}]=this.value" class="${inCls} flex-1"><button onclick="removeItem(${ci},${ti})" class="text-red-400 hover:text-red-300 px-1">✕</button></div>`).join('')}
                 <button onclick="addItem(${ci})" class="pr-4 text-[11px] text-emerald-400 hover:underline">+ إضافة عادة فرعية</button>
             </div>`).join('');
         }
-        function addCat() { habitsDraft.push({ icon: '', title: '', items: [''] }); renderHabitsEditor(); }
+        function addCat() { habitsDraft.push({ title: '', items: [''] }); renderHabitsEditor(); }
         function removeCat(i) { if (confirm('حذف هذا المحور بكل عاداته؟')) { habitsDraft.splice(i, 1); renderHabitsEditor(); } }
         function addItem(ci) { habitsDraft[ci].items.push(''); renderHabitsEditor(); }
         function removeItem(ci, ti) { habitsDraft[ci].items.splice(ti, 1); renderHabitsEditor(); }
@@ -499,14 +524,14 @@
         async function saveHabits() {
             if (!isAdmin) { alert('للمشرف فقط.'); return; }
             const cleaned = habitsDraft
-                .map(c => ({ icon: (c.icon || '').trim(), title: (c.title || '').trim(), items: c.items.map(t => t.trim()).filter(Boolean) }))
+                .map(c => ({ title: (c.title || '').trim(), items: c.items.map(t => t.trim()).filter(Boolean) }))
                 .filter(c => c.title && c.items.length);
             if (!cleaned.length) { alert('أضف محوراً واحداً على الأقل، له عنوان وعادة واحدة على الأقل.'); return; }
             try {
                 await db.collection('config').doc('app').set({ habits: cleaned }, { merge: true });
                 habitsDraft = JSON.parse(JSON.stringify(cleaned));
                 renderHabitsEditor();
-                alert('تم حفظ العادات ونشرها لكل المشاركين ✅');
+                alert('تم حفظ العادات ونشرها لكل المشاركين ');
             } catch (e) { fbErr(e); }
         }
         async function resetHabitsDefault() {
@@ -519,8 +544,22 @@
             } catch (e) { fbErr(e); }
         }
 
-        // ===== حديقة بنيان =====
-        const GARDEN_PLANTS = ['🌱','🌿','☘️','🍀','🌾','🌷','🌼','🌻','🌺','🪴','🌹','🌸'];
+        // ===== حديقة بنيان: نبتة لكل أسبوع مكتمل =====
+        function plantSVG(i) {
+            const c = ['#38F167', '#EBFE71', '#E0FCC1'][i % 3];
+            const h = 9 + (i % 12) * 0.8;
+            const pairs = 1 + Math.floor(i / 4);
+            let leaves = '';
+            for (let k = 1; k <= pairs + 1; k++) {
+                const y = (22 - (h * k) / (pairs + 1.5)).toFixed(1);
+                leaves += `<ellipse cx="8.6" cy="${y}" rx="3.4" ry="1.7" transform="rotate(-28 8.6 ${y})" fill="${c}"/><ellipse cx="15.4" cy="${y}" rx="3.4" ry="1.7" transform="rotate(28 15.4 ${y})" fill="${c}"/>`;
+            }
+            return `<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M12 22V${(22 - h).toFixed(1)}" stroke="${c}" stroke-width="1.6" stroke-linecap="round" fill="none"/>${leaves}</svg>`;
+        }
+        function treeSVG(on) {
+            const g = on ? '#38F167' : '#6C868D', y = on ? '#EBFE71' : '#4B6770';
+            return `<svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><rect x="22" y="28" width="4" height="16" rx="1.5" fill="#DDDAC7"/><circle cx="24" cy="20" r="11" fill="${g}"/><circle cx="16" cy="25" r="7" fill="${y}"/><circle cx="32" cy="25" r="7" fill="${y}"/></svg>`;
+        }
         function renderGarden() {
             const grid = document.getElementById('gardenGrid');
             if (!grid) return;
@@ -532,7 +571,7 @@
                 const plot = document.createElement('div');
                 if (i < weeks) {
                     plot.className = 'garden-plot planted';
-                    plot.innerHTML = `<span class="plant" style="animation-delay:${i * 0.08}s">${GARDEN_PLANTS[i]}</span><small>أسبوع ${i + 1}</small>`;
+                    plot.innerHTML = `<span class="plant" style="animation-delay:${i * 0.08}s">${plantSVG(i)}</span><small>أسبوع ${i + 1}</small>`;
                 } else {
                     plot.className = 'garden-plot';
                     plot.innerHTML = `<span class="seed">●</span><small>أسبوع ${i + 1}</small>`;
@@ -541,9 +580,9 @@
             }
             const tree = document.getElementById('gardenTree');
             if (completed >= 90) {
-                tree.innerHTML = '<span class="plant text-3xl" style="display:inline-block;animation:sprout .9s ease-out both">🌳</span><p class="text-[11px] text-emerald-300 font-bold mt-1">اكتملت الحديقة! أتممتم التسعين يوماً 🎉</p>';
+                tree.innerHTML = '<span class="plant" style="display:inline-block;animation:sprout .9s ease-out both">'+treeSVG(1)+'</span><p class="text-[11px] text-emerald-300 font-bold mt-1">اكتملت الحديقة! أتممتم التسعين يوماً </p>';
             } else {
-                tree.innerHTML = '<span class="text-xl opacity-30">🌳</span><p class="text-[10px] text-slate-500 mt-1">شجرة بنيان تنبت عند إتمام اليوم التسعين</p>';
+                tree.innerHTML = '<span class="opacity-30 inline-block">'+treeSVG(0)+'</span><p class="text-[10px] text-slate-500 mt-1">شجرة بنيان تنبت عند إتمام اليوم التسعين</p>';
             }
             document.getElementById('gardenCounter').textContent = `${weeks} / 12`;
             const hint = document.getElementById('gardenHint');
@@ -567,13 +606,13 @@
                 let icon = '';
                 if(i < activeDay) {
                     card.classList.add('completed');
-                    icon = '✅';
+                    icon = 'تم';
                 } else if(i === activeDay) {
                     card.classList.add('active');
-                    icon = '📝';
+                    icon = 'الآن';
                 } else {
                     card.classList.add('locked');
-                    icon = '🔒';
+                    icon = 'مغلق';
                 }
 
                 card.innerHTML = `<span>اليوم ${i}</span><span class="text-[10px] mt-1">${icon}</span>`;
@@ -589,7 +628,7 @@
                 const dayBox = document.createElement('div');
                 dayBox.className = "bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3";
                 dayBox.innerHTML = `
-                    <h4 class="font-bold text-sm text-emerald-400">📅 اليوم التمهيدي ${i}</h4>
+                    <h4 class="font-bold text-sm text-emerald-400"> اليوم التمهيدي ${i}</h4>
                     <div>
                         <label class="block text-xs text-slate-300 mb-1">مدى التزامي بالعادات:</label>
                         <select id="init_habits_${i}" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white">
@@ -610,8 +649,13 @@
             }
         }
 
-        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+
+
+        function openAuthModal() { 
+            document.getElementById('authModal').classList.remove('hidden');
+        }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
 
         function switchAuthTab(tab) {
             const loginBtn = document.getElementById('loginTabBtn');
@@ -645,6 +689,9 @@
             document.getElementById('loginFormSection').classList.remove('hidden');
         }
 
+
+
+
         function checkUserSession() {
             const activeUserStr = currentUser;
             const initialSection = document.getElementById('initialFiveDaysSection');
@@ -653,6 +700,8 @@
 
             if(activeUserStr) {
                 const user = currentUser;
+                
+                // إخفاء لافتة الترحيب بمجرد تسجيل الدخول
                 if(welcomeBanner) welcomeBanner.classList.add('hidden');
 
                 document.getElementById('authButtonNav').classList.add('hidden');
@@ -673,7 +722,9 @@
 
                 initOrUpdateChart(user.chartHistory || []);
             } else {
+                // إظهار لافتة الترحيب إذا لم يكن المستخدم مسجلاً الدخول
                 if(welcomeBanner) welcomeBanner.classList.remove('hidden');
+
                 document.getElementById('authButtonNav').classList.remove('hidden');
                 document.getElementById('userProfileBadge').classList.add('hidden');
                 initialSection.classList.add('hidden');
@@ -681,9 +732,23 @@
             }
         }
 
+
+
+
+
+
+
+
+
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); document.getElementById('adminPassword').value = ''; }
+
+
         function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
+
+
         // ================= Firebase =================
+        // تم دمج إعدادات Firebase الخاصة بك مباشرة هنا
         const firebaseConfig = {
             apiKey: "AIzaSyDkmt5UJ0bxO6vmzIWPcBeUDL13meCdbcg",
             authDomain: "challenge-7af8b.firebaseapp.com",
@@ -693,6 +758,7 @@
             appId: "1:711094697889:web:55fbdee191cdc1b98555e0"
         };
         firebase.initializeApp(firebaseConfig);
+        // بريد المشرف (بحروف صغيرة) — يجب أن يكون نفسه في ملف firestore.rules
         const ADMIN_EMAIL = "algerianpositivevibes2021@gmail.com";
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -781,7 +847,7 @@
         async function submitForgotPasswordRequest() {
             const email = document.getElementById('forgotEmailInput').value.trim();
             if (!email) { alert('الرجاء إدخال البريد الإلكتروني!'); return; }
-            try { await auth.sendPasswordResetEmail(email); alert('أرسلنا رابط تعيين كلمة مرور جديدة إلى بريدك. تفقّد صندوق الوارد.'); closeAuthModal(); }
+            try { await auth.sendPasswordResetEmail(email); alert('أرسلنا رابط تعيين كلمة مرور جديدة إلى بريدك. تفقّد صندوق الوارد (والرسائل غير المرغوبة).'); closeAuthModal(); }
             catch (e) { fbErr(e); }
         }
 
@@ -807,7 +873,7 @@
             if (!currentUser) { alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك!'); openAuthModal(); return; }
             const user = currentUser;
             const activeDay = getGlobalActiveDay();
-            if (user.lastReportDay === activeDay) { alert('أرسلت تقرير هذا اليوم من قبل. موعدنا غداً بإذن الله 🌱'); return; }
+            if (user.lastReportDay === activeDay) { alert('أرسلت تقرير هذا اليوم من قبل. موعدنا غداً بإذن الله '); return; }
             const checkedHabits = [...document.querySelectorAll('.habit-sub:checked')].map(cb => cb.value);
             user.habits = checkedHabits;
             user.taskDone = document.getElementById('dailyTaskDoneCheck').checked;
@@ -829,7 +895,7 @@
                 document.getElementById('dailyUserNote').value = '';
                 document.getElementById('communityThoughtInput').value = '';
                 document.querySelectorAll('.habit-sub, #dailyTaskDoneCheck').forEach(c => c.checked = false);
-                alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
+                alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. `);
                 checkUserSession();
             } catch (e) { fbErr(e); }
         }
@@ -846,7 +912,7 @@
             document.getElementById('communityNotesWall').innerHTML = list.map(t => `<div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300 italic">"${esc(t.note)}" <span class="block text-[10px] text-emerald-400 not-italic mt-1">— ${esc(t.name)}</span></div>`).join('');
         }
 
-        // ---------- المشرف (يفتح مباشرة بالإيميل) ----------
+        // ---------- المشرف ----------
         function checkAdminAccess() {
             if (!currentUser) { alert('سجّل الدخول بحساب المشرف أولاً.'); openAuthModal(); return; }
             if (!isAdmin) { alert('هذا الحساب ليس حساب مشرف.'); return; }
@@ -883,7 +949,7 @@
         }
 
         async function resetSystemData() {
-            if (!isAdmin || !confirm('سيتم تصفير نقاط وتقارير كل المشاركين وإرجاع اليوم النشط إلى 6. متأكد؟')) return;
+            if (!isAdmin || !confirm('سيتم تصفير نقاط وتقارير كل المشاركين وإرجاع اليوم النشط إلى 6 (الحسابات تبقى). متأكد؟')) return;
             try {
                 const snap = await db.collection('users').get();
                 const batch = db.batch();
@@ -913,7 +979,7 @@
                     db.collection('thoughts').where('approved', '==', false).get()
                 ]);
                 tbody.innerHTML = us.empty ? `<tr><td colspan="4" class="py-4 text-center text-slate-400">لا يوجد مشاركون مسجلون بعد.</td></tr>` :
-                    us.docs.map(d => { const u = d.data(); return `<tr class="border-b border-slate-800/50 align-top"><td class="py-3 font-bold text-white">${esc(u.fullName)} <span class="block text-[10px] text-emerald-400 font-normal">${esc(u.batch)}</span></td><td class="py-3">${u.initialFiveDaysDone ? '✅ مكتمل' : '⏳ غير مكتمل'}</td><td class="py-3">${u.habits ? u.habits.length + ' عادات' : '0'}</td><td class="py-3">${u.taskDone ? '✓ أنجزها' : '✕'}</td></tr>`; }).join('');
+                    us.docs.map(d => { const u = d.data(); return `<tr class="border-b border-slate-800/50 align-top"><td class="py-3 font-bold text-white">${esc(u.fullName)} <span class="block text-[10px] text-emerald-400 font-normal">${esc(u.batch)}</span></td><td class="py-3">${u.initialFiveDaysDone ? ' مكتمل' : ' غير مكتمل'}</td><td class="py-3">${u.habits ? u.habits.length + ' عادات' : '0'}</td><td class="py-3">${u.taskDone ? '✓ أنجزها' : '✕'}</td></tr>`; }).join('');
                 notesBox.innerHTML = ns.empty ? `<p class="text-xs text-slate-400 italic">لا توجد ملاحظات خاصة مسجلة حالياً.</p>` :
                     ns.docs.map(d => { const n = d.data(); return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300"><b class="text-emerald-400">${esc(n.name)} (${esc(n.batch)}):</b> "${esc(n.note)}" <span class="block text-[9px] text-slate-500 mt-1">${esc(n.date)}</span></div>`; }).join('');
                 thoughtsBox.innerHTML = ts.empty ? `<p class="text-xs text-slate-400 italic">لا توجد خواطر جديدة بانتظار الموافقة حالياً.</p>` :
@@ -948,8 +1014,8 @@
                     datasets: [{
                         label: 'نسبة الالتزام اليومي (%)',
                         data: dataPoints,
-                        borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderColor: '#38F167',
+                        backgroundColor: 'rgba(56, 241, 103, 0.1)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4
@@ -959,16 +1025,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { ticks: { color: '#94A3B8' }, grid: { color: '#334155' } },
-                        y: { ticks: { color: '#94A3B8' }, grid: { color: '#334155' }, min: 0, max: 100 }
+                        x: { ticks: { color: '#ABBDC1' }, grid: { color: '#3D5963' } },
+                        y: { ticks: { color: '#ABBDC1' }, grid: { color: '#3D5963' }, min: 0, max: 100 }
                     }
                 }
             });
         }
     </script>
 </body>
-</html>
-    
-  </body>
-  
 </html>
