@@ -149,79 +149,7 @@
                 <div>
                     <h3 class="font-bold text-lg mb-4 text-emerald-400">📋 تقرير اليوم الحالي (العادات اليومية)</h3>
                     
-                    <div class="space-y-4">
-                        <!-- 1. الاستيقاظ باكراً -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">⏰</span> 1️⃣ الاستيقاظ باكراً</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الاستيقاظ مع صلاة الفجر"><span>استيقظت مع صلاة الفجر</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم العودة إلى الفراش"><span>لم أعد إلى الفراش بعد الفجر</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 2. الصلاة -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📖</span> 2️⃣ الصلاة</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلوات الخمس في وقتها"><span>أديت الصلوات الخمس في وقتها</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صلاة النوافل على حسب القدرة"><span>حافضت على صلاة النوافل حسب استطاعتي</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="الصلاة في المسجد للرجال"><span>أديت الصلاة في المسجد</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 3. الأذكار -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📿</span> 3️⃣ الأذكار</h4>
-                            <div class="space-y-2 pr-4 text-xs grid grid-cols-1 sm:grid-cols-2">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار الصباح"><span>قرأت أذكار الصباح</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار المساء"><span>قرأت أذكار المساء</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار بعد الصلاة"><span>داومت على أذكار بعد الصلاة</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="أذكار النوم"><span>قرأت أذكار النوم</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 4. الورد القرآني -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📚</span> 4️⃣ الورد القرآني</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="صفحة واحدة على الأقل"><span>أتممت وردي القرآني (صفحة واحدة على الأقل)</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 5. المطالعة -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📖</span> 5️⃣ المطالعة</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="20 دقيقة قراءة"><span>قرأت لمدة 20 دقيقة على الأقل</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 6. الهاتف -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">📱</span> 6️⃣ الهاتف</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" id="phoneHabitCheck" class="habit-sub accent-emerald-500 w-4 h-4" value="3 ساعات متواصلة دون هاتف"><span id="phoneHabitLabel">ابتعدت عن الهاتف لـ 3 ساعات متواصلة</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="عدم استخدامه أثناء المهام المهمة"><span>تجنبت استخدامه أثناء إنجاز مهامي</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 7. الحركة -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">🏃</span> 7️⃣ الحركة</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="30 دقيقة مشي أو تمارين رياضية"><span>مارست المشي أو التمارين الرياضية لـ 30 دقيقة</span></label>
-                            </div>
-                        </div>
-
-                        <!-- 8. النوم -->
-                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">🌙</span> 8️⃣ النوم</h4>
-                            <div class="space-y-2 pr-4 text-xs">
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="النوم في الوقت المحدد"><span>نمْت في الوقت المحدد</span></label>
-                                <label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="إيقاف الهاتف قبل النوم بـ30 دقيقة"><span>أوقفت الهاتف قبل النوم بـ 30 دقيقة</span></label>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="habitsContainer" class="space-y-4"></div>
 
                     <!-- ملاحظات خاصة للإدارة -->
                     <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 mt-6">
@@ -420,13 +348,17 @@
                 </div>
             </div>
 
-            <!-- تعديل مدة الابتعاد عن الهاتف -->
-            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-                <h4 class="text-xs font-bold text-emerald-400 mb-2">📱 مدة الابتعاد عن الهاتف في خانة العادات (بالساعات):</h4>
-                <div class="flex items-center gap-2">
-                    <input type="number" id="phoneHoursInput" min="1" max="12" value="3" class="w-24 bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white text-center">
-                    <button onclick="savePhoneHours()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs hover:bg-emerald-400 transition">حفظ</button>
-                    <span class="text-[10px] text-slate-400">النص الحالي: <b id="phoneHoursPreview" class="text-slate-200"></b></span>
+            <!-- محرر العادات اليومية -->
+            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <h4 class="text-xs font-bold text-emerald-400">📝 تعديل العادات اليومية (تظهر فوراً عند كل المشاركين بعد الحفظ):</h4>
+                    <button onclick="resetHabitsDefault()" class="text-[11px] bg-slate-800 text-slate-300 px-3 py-1 rounded-lg hover:bg-slate-700">استرجاع القائمة الافتراضية</button>
+                </div>
+                <p class="text-[10px] text-slate-400">اكتب كل عادة بصيغة المتكلم (مثال: «قرأت أذكار الصباح»). الأيقونة اختيارية.</p>
+                <div id="habitsEditor" class="space-y-3"></div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="addCat()" class="bg-slate-800 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold hover:bg-slate-700">+ إضافة محور جديد</button>
+                    <button onclick="saveHabits()" class="bg-emerald-500 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs hover:bg-emerald-400">حفظ ونشر للجميع ✅</button>
                 </div>
             </div>
 
@@ -518,7 +450,7 @@
             const randomMsg = messagesList[Math.floor(Math.random() * messagesList.length)];
             document.getElementById('quoteBoxText').textContent = `"${randomMsg.text}"`;
 
-            applyPhoneHours();
+            renderHabits();
             renderDaysGrid();
             initOrUpdateChart([]);
             initFirebase();
@@ -526,33 +458,86 @@
 
 
 
-        // ===== مدة الابتعاد عن الهاتف (يعدّلها المشرف) =====
+        // ===== العادات اليومية (يعدّلها المشرف وتُخزَّن في Firestore: config/app.habits) =====
         function hoursPhrase(h) {
             if (h === 1) return 'ساعة واحدة';
             if (h === 2) return 'ساعتين';
             if (h >= 3 && h <= 10) return `${h} ساعات`;
             return `${h} ساعة`;
         }
-        function applyPhoneHours() {
+        function defaultHabits() {
             let h = parseInt(appConfig.phoneHours);
             if (!h || h < 1 || h > 12) h = 3;
-            const phrase = hoursPhrase(h);
-            const label = document.getElementById('phoneHabitLabel');
-            const check = document.getElementById('phoneHabitCheck');
-            const input = document.getElementById('phoneHoursInput');
-            const preview = document.getElementById('phoneHoursPreview');
-            if (label) label.textContent = `ابتعدت عن الهاتف لـ ${phrase} متواصلة`;
-            if (check) check.value = `${phrase} متواصلة دون هاتف`;
-            if (input) input.value = h;
-            if (preview) preview.textContent = `ابتعدت عن الهاتف لـ ${phrase} متواصلة`;
+            return [
+                { icon: '⏰', title: 'الاستيقاظ باكراً', items: ['استيقظت مع صلاة الفجر', 'لم أعد إلى الفراش بعد الفجر'] },
+                { icon: '📖', title: 'الصلاة', items: ['أديت الصلوات الخمس في وقتها', 'حافظت على صلاة النوافل حسب استطاعتي', 'أديت الصلاة في المسجد'] },
+                { icon: '📿', title: 'الأذكار', items: ['قرأت أذكار الصباح', 'قرأت أذكار المساء', 'داومت على أذكار بعد الصلاة', 'قرأت أذكار النوم'] },
+                { icon: '📚', title: 'الورد القرآني', items: ['أتممت وردي القرآني (صفحة واحدة على الأقل)'] },
+                { icon: '📖', title: 'المطالعة', items: ['قرأت لمدة 20 دقيقة على الأقل'] },
+                { icon: '📱', title: 'الهاتف', items: [`ابتعدت عن الهاتف لـ ${hoursPhrase(h)} متواصلة`, 'تجنبت استخدامه أثناء إنجاز مهامي'] },
+                { icon: '🏃', title: 'الحركة', items: ['مارست المشي أو التمارين الرياضية لـ 30 دقيقة'] },
+                { icon: '🌙', title: 'النوم', items: ['نمت في الوقت المحدد', 'أوقفت الهاتف قبل النوم بـ 30 دقيقة'] }
+            ];
         }
-        function savePhoneHours() {
-            const h = parseInt(document.getElementById('phoneHoursInput').value);
-            if (!h || h < 1 || h > 12) { alert('أدخل عدداً صحيحاً من الساعات بين 1 و 12.'); return; }
+        function getHabits() {
+            return Array.isArray(appConfig.habits) && appConfig.habits.length ? appConfig.habits : defaultHabits();
+        }
+        function renderHabits() {
+            const box = document.getElementById('habitsContainer');
+            if (!box) return;
+            const checked = new Set([...box.querySelectorAll('.habit-sub:checked')].map(c => c.value));
+            box.innerHTML = getHabits().map((c, i) => `<div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800"><h4 class="font-bold text-sm text-white mb-2 flex items-center"><span class="ml-2">${esc(c.icon || '•')}</span> ${i + 1}. ${esc(c.title)}</h4><div class="space-y-2 pr-4 text-xs">${(c.items || []).map(t => `<label class="flex items-center space-x-2 space-x-reverse cursor-pointer"><input type="checkbox" class="habit-sub accent-emerald-500 w-4 h-4" value="${esc(t)}"${checked.has(t) ? ' checked' : ''}><span>${esc(t)}</span></label>`).join('')}</div></div>`).join('');
+        }
+
+        // ----- محرر المشرف -----
+        let habitsDraft = [];
+        const inCls = 'bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500';
+        function renderHabitsEditor() {
+            const box = document.getElementById('habitsEditor');
+            if (!box) return;
+            box.innerHTML = habitsDraft.map((c, ci) => `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+                <div class="flex gap-2 items-center">
+                    <input value="${esc(c.icon)}" maxlength="4" placeholder="🙂" oninput="habitsDraft[${ci}].icon=this.value" class="${inCls} w-14 text-center">
+                    <input value="${esc(c.title)}" placeholder="عنوان المحور" oninput="habitsDraft[${ci}].title=this.value" class="${inCls} flex-1 font-bold">
+                    <button onclick="moveCat(${ci},-1)" class="text-slate-400 hover:text-white px-1">↑</button>
+                    <button onclick="moveCat(${ci},1)" class="text-slate-400 hover:text-white px-1">↓</button>
+                    <button onclick="removeCat(${ci})" class="text-red-400 hover:text-red-300 px-1">🗑️</button>
+                </div>
+                ${c.items.map((t, ti) => `<div class="flex gap-2 items-center pr-4"><input value="${esc(t)}" placeholder="نص العادة" oninput="habitsDraft[${ci}].items[${ti}]=this.value" class="${inCls} flex-1"><button onclick="removeItem(${ci},${ti})" class="text-red-400 hover:text-red-300 px-1">✕</button></div>`).join('')}
+                <button onclick="addItem(${ci})" class="pr-4 text-[11px] text-emerald-400 hover:underline">+ إضافة عادة فرعية</button>
+            </div>`).join('');
+        }
+        function addCat() { habitsDraft.push({ icon: '', title: '', items: [''] }); renderHabitsEditor(); }
+        function removeCat(i) { if (confirm('حذف هذا المحور بكل عاداته؟')) { habitsDraft.splice(i, 1); renderHabitsEditor(); } }
+        function addItem(ci) { habitsDraft[ci].items.push(''); renderHabitsEditor(); }
+        function removeItem(ci, ti) { habitsDraft[ci].items.splice(ti, 1); renderHabitsEditor(); }
+        function moveCat(i, d) {
+            const j = i + d;
+            if (j < 0 || j >= habitsDraft.length) return;
+            [habitsDraft[i], habitsDraft[j]] = [habitsDraft[j], habitsDraft[i]];
+            renderHabitsEditor();
+        }
+        async function saveHabits() {
             if (!isAdmin) { alert('للمشرف فقط.'); return; }
-            db.collection('config').doc('app').set({ phoneHours: h }, { merge: true }).catch(fbErr);
-            applyPhoneHours();
-            alert('تم تحديث مدة الابتعاد عن الهاتف في خانة العادات ✅');
+            const cleaned = habitsDraft
+                .map(c => ({ icon: (c.icon || '').trim(), title: (c.title || '').trim(), items: c.items.map(t => t.trim()).filter(Boolean) }))
+                .filter(c => c.title && c.items.length);
+            if (!cleaned.length) { alert('أضف محوراً واحداً على الأقل، له عنوان وعادة واحدة على الأقل.'); return; }
+            try {
+                await db.collection('config').doc('app').set({ habits: cleaned }, { merge: true });
+                habitsDraft = JSON.parse(JSON.stringify(cleaned));
+                renderHabitsEditor();
+                alert('تم حفظ العادات ونشرها لكل المشاركين ✅');
+            } catch (e) { fbErr(e); }
+        }
+        async function resetHabitsDefault() {
+            if (!isAdmin || !confirm('سيتم حذف تعديلاتك والرجوع للقائمة الافتراضية عند الجميع. متأكد؟')) return;
+            try {
+                await db.collection('config').doc('app').set({ habits: firebase.firestore.FieldValue.delete() }, { merge: true });
+                habitsDraft = JSON.parse(JSON.stringify(defaultHabits()));
+                renderHabitsEditor();
+                alert('تم الرجوع للقائمة الافتراضية.');
+            } catch (e) { fbErr(e); }
         }
 
         // ===== حديقة بنيان: نبتة لكل أسبوع مكتمل =====
@@ -786,7 +771,7 @@
         function initFirebase() {
             db.collection('config').doc('app').onSnapshot(d => {
                 appConfig = d.exists ? d.data() : {};
-                applyPhoneHours();
+                renderHabits();
                 renderDaysGrid();
             }, console.error);
             db.collection('leaderboard').orderBy('score', 'desc').limit(5).onSnapshot(s => renderLeaderboard(s.docs.map(d => d.data())), console.error);
@@ -869,16 +854,20 @@
         async function submitDailyReport() {
             if (!currentUser) { alert('عذراً، يجب تسجيل الدخول أولاً لإرسال تقريرك!'); openAuthModal(); return; }
             const user = currentUser;
+            const activeDay = getGlobalActiveDay();
+            if (user.lastReportDay === activeDay) { alert('أرسلت تقرير هذا اليوم من قبل. موعدنا غداً بإذن الله 🌱'); return; }
             const checkedHabits = [...document.querySelectorAll('.habit-sub:checked')].map(cb => cb.value);
             user.habits = checkedHabits;
             user.taskDone = document.getElementById('dailyTaskDoneCheck').checked;
             user.dailyNote = document.getElementById('dailyUserNote').value.trim();
             user.communityThought = document.getElementById('communityThoughtInput').value.trim();
+            user.lastReportDay = activeDay;
             user.reportsCount = (user.reportsCount || 0) + 1;
             user.streak = (user.streak || 0) + 1;
             const calculatedScore = checkedHabits.length + (user.taskDone ? 3 : 0);
             user.score = (user.score || 0) + calculatedScore;
-            const dayPercent = Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / 9) * 100);
+            const totalItems = document.querySelectorAll('.habit-sub').length + 1;
+            const dayPercent = Math.min(100, Math.round(((checkedHabits.length + (user.taskDone ? 1 : 0)) / totalItems) * 100));
             user.chartHistory = [...(user.chartHistory || []), dayPercent];
             try {
                 await saveUser();
@@ -887,6 +876,7 @@
                 if (user.communityThought) await db.collection('thoughts').add({ uid: user.uid, name: user.fullName, note: user.communityThought, approved: false, at: Date.now() });
                 document.getElementById('dailyUserNote').value = '';
                 document.getElementById('communityThoughtInput').value = '';
+                document.querySelectorAll('.habit-sub, #dailyTaskDoneCheck').forEach(c => c.checked = false);
                 alert(`تم إرسال تقرير اليوم بنجاح وانعكس في المنحنى البياني! حصلت على ${calculatedScore} نقطة. 🌱✨`);
                 checkUserSession();
             } catch (e) { fbErr(e); }
@@ -909,6 +899,8 @@
             if (!currentUser) { alert('سجّل الدخول بحساب المشرف أولاً.'); openAuthModal(); return; }
             if (!isAdmin) { alert('هذا الحساب ليس حساب مشرف.'); return; }
             loadAdminDashboardData();
+            habitsDraft = JSON.parse(JSON.stringify(getHabits()));
+            renderHabitsEditor();
             document.getElementById('adminModal').classList.remove('hidden');
         }
 
@@ -944,7 +936,7 @@
                 const snap = await db.collection('users').get();
                 const batch = db.batch();
                 snap.forEach(d => {
-                    batch.update(d.ref, { initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] });
+                    batch.update(d.ref, { initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [], lastReportDay: 0 });
                     batch.set(db.collection('leaderboard').doc(d.id), { score: 0 }, { merge: true });
                 });
                 batch.set(db.collection('config').doc('app'), { activeDay: 6 }, { merge: true });
