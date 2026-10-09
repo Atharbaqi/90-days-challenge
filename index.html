@@ -125,7 +125,7 @@
         <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-lg text-emerald-400"> شبكة رحلة الـ 90 يوماً</h3>
-                <span id="currentActiveDayLabel" class="text-xs bg-slate-900 px-3 py-1 rounded-xl text-emerald-400 border border-slate-800 font-bold">اليوم النشط: 6</span>
+                <span id="currentActiveDayLabel" class="text-xs bg-slate-900 px-3 py-1 rounded-xl text-emerald-400 border border-slate-800 font-bold">اليوم النشط: 7</span>
             </div>
             <p class="text-xs text-slate-400 mb-6">الأيام السابقة مقفولة ومجراة، اليوم الحالي مفتوح للإرسال، والأيام القادمة مقفولة بانتظار فتح الأدمن.</p>
             
@@ -134,18 +134,18 @@
             </div>
         </div>
 
-        <!-- قسم تعبئة الأيام الخمسة الأولى (بصياغة الفصحى وبضمير أنا) -->
+        <!-- قسم تعبئة الأيام الستة الأولى (بصياغة الفصحى وبضمير أنا) -->
         <div id="initialFiveDaysSection" class="hidden bg-[#2B464F] p-8 rounded-3xl border border-amber-500/40 space-y-6">
             <div class="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30">
-                <h3 class="font-bold text-base text-amber-400"> مرحباً بك! يرجى أولاً تحديد تقرير الأيام الخمسة الأولى (التمهيدية):</h3>
-                <p class="text-xs text-slate-300 mt-1">حدد مدى التزامك بالعادات لكل يوم من الأيام الخمسة الماضية بضمير المتكلم قبل الانتقال إلى اليوم السادس.</p>
+                <h3 class="font-bold text-base text-amber-400"> مرحباً بك! يرجى أولاً تحديد تقرير الأيام الستة الأولى (التمهيدية):</h3>
+                <p class="text-xs text-slate-300 mt-1">حدد مدى التزامك بالعادات لكل يوم من الأيام الستة الماضية بضمير المتكلم قبل الانتقال إلى اليوم السابع.</p>
             </div>
             
             <div id="initialDaysFormContainer" class="space-y-6">
-                <!-- توليد الأيام 1 لـ 5 -->
+                <!-- توليد الأيام 1 لـ 6 -->
             </div>
 
-            <button onclick="submitInitialFiveDays()" class="w-full bg-amber-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-amber-400 transition shadow-lg">حفظ تقارير الأيام الخمسة الأولى والتوجه لبيانات اليوم السادس</button>
+            <button onclick="submitInitialFiveDays()" class="w-full bg-amber-500 text-slate-950 font-bold py-3 rounded-2xl hover:bg-amber-400 transition shadow-lg">حفظ تقارير الأيام الستة الأولى والتوجه لبيانات اليوم السابع</button>
         </div>
 
         <!-- قسم العادات اليومية التفصيلية -->
@@ -338,7 +338,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/30 flex justify-between items-center">
                     <div>
-                        <h4 class="text-xs font-bold text-emerald-400">اليوم النشط الحالي: <span id="adminCurrentDayDisplay" class="font-bold text-white">6</span></h4>
+                        <h4 class="text-xs font-bold text-emerald-400">اليوم النشط الحالي: <span id="adminCurrentDayDisplay" class="font-bold text-white">7</span></h4>
                         <p class="text-[10px] text-slate-300 mt-0.5">تقدم باليوم إلى الأمام للمشاركين</p>
                     </div>
                     <button onclick="adminOpenNextDay()" class="bg-emerald-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs hover:bg-emerald-400 transition shadow-lg">فتح اليوم الموالي ➔</button>
@@ -397,7 +397,7 @@
                     <thead>
                         <tr class="border-b border-slate-800 text-slate-400">
                             <th class="pb-2">المشارك والدفعة</th>
-                            <th class="pb-2">الأيام الخمسة الأولى</th>
+                            <th class="pb-2">الأيام الستة الأولى</th>
                             <th class="pb-2">العادات اليومية</th>
                             <th class="pb-2">مهمة اليوم</th>
                         </tr>
@@ -624,7 +624,7 @@
             const container = document.getElementById('initialDaysFormContainer');
             container.innerHTML = '';
 
-            for(let i = 1; i <= 5; i++) {
+            for(let i = 1; i <= 6; i++) {
                 const dayBox = document.createElement('div');
                 dayBox.className = "bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3";
                 dayBox.innerHTML = `
@@ -784,7 +784,7 @@
         function newProfile(fullName, batch, email) {
             return { fullName, batch, email, initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [] };
         }
-        function getGlobalActiveDay() { return parseInt(appConfig.activeDay) || 6; }
+        function getGlobalActiveDay() { return parseInt(appConfig.activeDay) || 7; }
 
         function initFirebase() {
             db.collection('config').doc('app').onSnapshot(d => {
@@ -855,7 +855,7 @@
         async function submitInitialFiveDays() {
             if (!currentUser) return;
             const initialReports = [], chartHistory = [];
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 6; i++) {
                 const habitsStatus = document.getElementById(`init_habits_${i}`).value;
                 const taskStatus = document.getElementById(`init_task_${i}`).value;
                 initialReports.push({ day: i, habitsStatus, taskStatus });
@@ -864,7 +864,7 @@
             Object.assign(currentUser, { initialFiveDaysDone: true, initialReports, chartHistory, score: (currentUser.score || 0) + 25 });
             try {
                 await saveUser();
-                alert('تم حفظ تقارير الأيام الخمسة الأولى بنجاح وانعكست في المنحنى البياني! مرحباً بك في اليوم السادس.');
+                alert('تم حفظ تقارير الأيام الستة الأولى بنجاح وانعكست في المنحنى البياني! مرحباً بك في اليوم السابع.');
                 checkUserSession();
             } catch (e) { fbErr(e); }
         }
@@ -949,7 +949,7 @@
         }
 
         async function resetSystemData() {
-            if (!isAdmin || !confirm('سيتم تصفير نقاط وتقارير كل المشاركين وإرجاع اليوم النشط إلى 6 (الحسابات تبقى). متأكد؟')) return;
+            if (!isAdmin || !confirm('سيتم تصفير نقاط وتقارير كل المشاركين وإرجاع اليوم النشط إلى 7 (الحسابات تبقى). متأكد؟')) return;
             try {
                 const snap = await db.collection('users').get();
                 const batch = db.batch();
@@ -957,7 +957,7 @@
                     batch.update(d.ref, { initialFiveDaysDone: false, initialReports: [], habits: [], taskDone: false, dailyNote: "", communityThought: "", score: 0, streak: 0, reportsCount: 0, chartHistory: [], lastReportDay: 0 });
                     batch.set(db.collection('leaderboard').doc(d.id), { score: 0 }, { merge: true });
                 });
-                batch.set(db.collection('config').doc('app'), { activeDay: 6 }, { merge: true });
+                batch.set(db.collection('config').doc('app'), { activeDay: 7 }, { merge: true });
                 await batch.commit();
                 const [pn, th] = await Promise.all([db.collection('privateNotes').get(), db.collection('thoughts').get()]);
                 const b2 = db.batch();
@@ -997,7 +997,7 @@
 
         function initOrUpdateChart(historyData) {
             const ctx = document.getElementById('progressChart').getContext('2d');
-            let labels = historyData.length > 0 ? historyData.map((_, i) => i < 5 ? `تمهيدي ${i + 1}` : `اليوم ${i + 1}`) : ['البداية'];
+            let labels = historyData.length > 0 ? historyData.map((_, i) => i < 6 ? `تمهيدي ${i + 1}` : `اليوم ${i + 1}`) : ['البداية'];
             let dataPoints = historyData.length > 0 ? historyData : [0];
 
             if (progressChartInstance) {
