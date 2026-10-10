@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رحلة التسعين يوماً - بنيان</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Cairo -->
@@ -61,7 +62,7 @@
     <!-- شريط التنقل العلوي التفاعلي -->
     <header class="bg-[#1B323A] border-b border-slate-800 py-3 sm:py-4 px-4 sm:px-6 flex flex-wrap gap-y-2 justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-emerald-400 font-black text-xl">بنيان</span>
+            <img src="images/logo-header.png" alt="بنيان" class="h-8 sm:h-9 w-auto" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-emerald-400 font-black text-xl',textContent:'بنيان'}))">
             <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-bold inline-block">همة تحيي الأمة</span>
             <!-- زر المدير للهاتف (يختفي في الشاشات الكبيرة لأنه موجود في القائمة) -->
             <button onclick="checkAdminAccess()" class="md:hidden text-[11px] bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30 font-bold">المدير </button>
@@ -154,7 +155,20 @@
                 <div>
                     <h3 class="font-bold text-lg mb-4 text-emerald-400"> تقرير اليوم الحالي (العادات اليومية)</h3>
                     
-                    <div id="habitsContainer" class="space-y-4"></div>
+                    <!-- مهمة اليوم (جزء من التقرير) -->
+                    <div class="rounded-2xl border border-amber-500/40 bg-gradient-to-l from-amber-500/15 to-slate-900/60 p-4 mb-5">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <h4 class="text-sm font-bold text-amber-400">مهمة اليوم</h4>
+                            <span class="text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 rounded-full px-2 py-0.5">نقاط إضافية</span>
+                        </div>
+                        <p id="displayDailyTask" class="text-sm text-slate-100 leading-relaxed mb-3">أغلق الهاتف ساعة قبل النوم واقضِ وقتاً في ذكر الله.</p>
+                        <label class="flex items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-700 cursor-pointer hover:border-amber-500/60 transition">
+                            <input type="checkbox" id="dailyTaskDoneCheck" class="accent-amber-400 w-5 h-5">
+                            <span class="text-xs font-bold text-amber-300">أنجزت مهمة اليوم (ترسل مع التقرير)</span>
+                        </label>
+                    </div>
+
+                    <div id="habitsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
                     <!-- ملاحظات خاصة للإدارة -->
                     <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 mt-6">
@@ -172,20 +186,10 @@
             </div>
 
             <!-- الجانب الأيمن -->
-            <div class="space-y-6">
+            <div class="flex flex-col gap-6">
                 <!-- اقتباسات متجددة (من الـ PDF بدون عنوان) -->
                 <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
                     <p id="quoteBoxText" class="text-sm italic text-slate-300">"والله ما داهم الفراغ قلبا إلا أهلكه وأوهنه! قم بما عليك ولا عليك."</p>
-                </div>
-
-                <!-- مهمة اليوم -->
-                <div class="bg-[#2B464F] p-6 rounded-3xl border border-slate-800">
-                    <h4 class="text-sm font-bold text-emerald-400 mb-2">مهمة اليوم</h4>
-                    <p id="displayDailyTask" class="text-xs text-slate-300 mb-4">أغلق الهاتف ساعة قبل النوم واقضِ وقتاً في ذكر الله.</p>
-                    <label class="flex items-center space-x-2 space-x-reverse bg-slate-900/80 p-3 rounded-xl border border-slate-800 cursor-pointer">
-                        <input type="checkbox" id="dailyTaskDoneCheck" class="accent-emerald-500 w-4 h-4">
-                        <span class="text-xs font-bold text-emerald-300">أنجزت مهمة اليوم (ترسل مع التقرير)</span>
-                    </label>
                 </div>
 
                 <!-- لوحة أصحاب الهمم -->
@@ -226,6 +230,12 @@
                     <div id="gardenGrid" class="grid grid-cols-4 gap-2"></div>
                     <div id="gardenTree" class="mt-2 rounded-xl border border-dashed border-slate-700 bg-amber-950/20 py-3 text-center"></div>
                 </div>
+
+                <!-- بطاقة الهوية: تملأ المساحة الفارغة أسفل العمود -->
+                <div id="brandCard" class="flex-1 min-h-[200px] rounded-3xl bg-[#EEEEEE] border border-slate-700 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                    <img src="images/logo-card.png" alt="شعار بنيان" class="w-32 sm:w-36 h-auto" onerror="document.getElementById('brandCard').remove()">
+                    <p class="text-[11px] font-bold" style="color:#2B464F">همة تحيي الأمة</p>
+                </div>
             </div>
         </div>
 
@@ -247,6 +257,7 @@
     <!-- نافذة تسجيل الدخول / حساب جديد / استعادة كلمة المرور / تنبيه كلمة المرور الجديدة -->
     <div id="authModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
         <div class="bg-[#2B464F] border border-slate-700 p-6 rounded-3xl max-w-md w-full mx-4 text-slate-100 relative">
+            <img src="images/logo-header.png" alt="بنيان" class="h-9 w-auto mx-auto mb-4" onerror="this.remove()">
             <div class="flex border-b border-slate-700 pb-3 mb-4">
                 <button onclick="switchAuthTab('login')" id="loginTabBtn" class="flex-1 font-bold text-sm text-emerald-400 pb-1 border-b-2 border-emerald-400 transition">تسجيل الدخول</button>
                 <button onclick="switchAuthTab('register')" id="registerTabBtn" class="flex-1 font-bold text-sm text-slate-400 pb-1 transition">حساب جديد</button>
