@@ -281,16 +281,17 @@
                 <h3 class="text-xs font-bold text-slate-300 mb-2">أهلاً بك مجدداً، سجّل دخولك لإرسال تقريرك:</h3>
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">البريد الإلكتروني:</label>
-                    <input type="email" id="loginEmail" placeholder="example@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="email" id="loginEmail" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="example@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">كلمة المرور:</label>
-                    <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
                 <div class="text-left">
                     <a href="javascript:void(0);" onclick="showForgotPasswordSection()" class="text-[11px] text-emerald-400 hover:underline">هل نسيت كلمة المرور؟</a>
                 </div>
-                <button onclick="handleLogin()" class="w-full bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-emerald-600 transition mt-2">دخول المنصة</button>
+                <p id="loginError" class="hidden text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-3 py-2 mt-2"></p>
+                    <button id="loginBtn" onclick="handleLogin()" class="w-full bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs hover:bg-emerald-600 transition mt-2">دخول المنصة</button>
             </div>
 
             <!-- نموذج نسيت كلمة المرور -->
@@ -816,11 +817,22 @@
             auth.onAuthStateChanged(async u => {
                 if (registering) return;
                 if (!u) { currentUser = null; isAdmin = false; checkUserSession(); return; }
+                isAdmin = (u.email || '').toLowerCase() === ADMIN_EMAIL;
                 try {
                     const p = await db.collection('users').doc(u.uid).get();
-                    isAdmin = (u.email || '').toLowerCase() === ADMIN_EMAIL;
                     currentUser = p.exists ? { uid: u.uid, ...p.data() } : { uid: u.uid, ...newProfile(isAdmin ? 'المشرف العام' : u.email, isAdmin ? 'الإدارة' : '', u.email), initialFiveDaysDone: isAdmin };
-                } catch (e) { console.error(e); }
+                } catch (e) {
+                    console.error(e);
+                    if (isAdmin) {
+                        // المشرف يدخل حتى لو تعذّر قراءة ملفه
+                        currentUser = { uid: u.uid, ...newProfile('المشرف العام', 'الإدارة', u.email), initialFiveDaysDone: true };
+                    } else {
+                        alert('تعذّر تحميل بياناتك (' + (e.code || e.message) + '). أعد المحاولة بعد قليل.');
+                        auth.signOut();
+                        return;
+                    }
+                }
+                if (!currentUser.fullName) currentUser.fullName = u.email || 'مشارك';
                 checkUserSession();
             });
         }
@@ -852,12 +864,32 @@
             finally { registering = false; }
         }
 
+        function loginMsg(e) {
+            const m = {
+                'auth/invalid-credential': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                'auth/wrong-password': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                'auth/user-not-found': 'لا يوجد حساب بهذا البريد.',
+                'auth/invalid-email': 'صيغة البريد الإلكتروني غير صحيحة.',
+                'auth/user-disabled': 'هذا الحساب موقوف.',
+                'auth/too-many-requests': 'محاولات كثيرة، انتظر قليلاً ثم حاول من جديد.',
+                'auth/network-request-failed': 'تعذّر الاتصال بالإنترنت. تأكد من الشبكة، أو افتح الرابط من متصفح Chrome مباشرة.',
+                'auth/web-storage-unsupported': 'هذا المتصفح لا يدعم تسجيل الدخول. افتح الرابط من Chrome أو Safari.'
+            };
+            return m[e.code] || ('تعذّر تسجيل الدخول (' + (e.code || e.message || e) + ')');
+        }
+
         async function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const pass = document.getElementById('loginPass').value.trim();
-            if (!email || !pass) { alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور!'); return; }
+            const err = document.getElementById('loginError'), btn = document.getElementById('loginBtn');
+            const show = m => { err.textContent = m; err.classList.remove('hidden'); };
+            err.classList.add('hidden');
+            if (!email || !pass) { show('الرجاء إدخال البريد الإلكتروني وكلمة المرور.'); return; }
+            const label = btn.textContent;
+            btn.disabled = true; btn.textContent = 'جارٍ الدخول...';
             try { await auth.signInWithEmailAndPassword(email, pass); closeAuthModal(); }
-            catch (e) { fbErr(e); }
+            catch (e) { show(loginMsg(e)); }
+            finally { btn.disabled = false; btn.textContent = label; }
         }
 
         function logoutUser() { auth.signOut().then(() => { alert('تم تسجيل الخروج بنجاح.'); location.reload(); }); }
